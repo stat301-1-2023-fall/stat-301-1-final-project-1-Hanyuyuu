@@ -18,47 +18,46 @@ execute:
 from: markdown+emoji 
 ---
 
-::: {.callout-important}
-## Memo format
-
-Like all other submissions for this course, we expect the memo to be neat and well organized.
-
-You should make this document your own. This is a template. To help with this we have added a date to the yaml above (good whenever writing memos). You should remove this block when making this document your own.
-
-:::
-
-::: {.callout-tip icon=false}
-
+::: {.callout-tip icon="false"}
 ## Github Repo Link
 
-To link to your github **repo**sitory, appropriately edit the example link below. Meaning replace `https://your-github-repo-url` with your github repo url. Suggest verifying the link works before submitting.
-
-[https://github.com/stat301-1-2023-fall/final-project-1-Hanyuyuu](https://github.com/stat301-1-2023-fall/final-project-1-Hanyuyuu)
-
-:::
-
-::: {.callout-warning}
-GitHub (free account) cannot store large files. If you try to commit and push a large dataset you will have an ERROR! Any file over 100 MB (100,000 KB) needs to be added to the `.gitignore` file BEFORE committing.
-
-**We may need to do that for files in your final project!**
+<https://github.com/stat301-1-2023-fall/final-project-1-Hanyuyuu>
 :::
 
 ## Data source
 
-Blah blah blah^[where blah blah came from, an example of footnote]
+This dataset contains information on traffic accidents in the City of Chicago from 2016 to 2023. Each row represents a crash within this time frame, and the data is sourced from the Chicago Data Portal.
+
+<https://data.cityofchicago.org/Transportation/Traffic-Crashes-Crashes/85ca-t3if>
 
 ## Why this data
 
-Blah blah blah^[another footnote]
+Since moving to Chicago my freshman year, I have been made aware that drivers in this region are far more aggressive than back home on the West Coast. I came across this dataset whilst browsing public data from the City of Chicago, and thought it would be an interesting undertaking to understand the causes and impacts of dangerous driving behaviors here. My overarching research question will be: "What are the primary predictors of traffic crashes in Chicago?". With such a detailed and high-quality dataset, I believe that I can generate substantial insights into this question. I am primarily curious about how road conditions and location can lead to accidents. In addition,  although not directly related to my overarching question, I would like to investigate the resulting effects of traffic incidents contained within this dataset. In investigating where traffic crashes occur most often, I intend to merge this dataset with publicly-available map data to visually understand where accidents occur the most often. Having taken STAT 302 last fall, I believe this will provide a good opportunity to revisit working with map data and some of my data visualization skills.
+
 
 ## Data quality & complexity check
+```{r}
+#| label: data-check
+library(tidyverse)
+library(skimr)
+traffic_data <- read_csv("data/raw/traffic_crashes.csv") |> janitor::clean_names()
 
-Blah blah blah
+skimr::skim(traffic_data) 
+
+traffic_data |> naniar::miss_var_summary()
+ 
+```
+
+
+The quality of this data is very high, likely because there are well-established procedures around reporting traffic incidents. This dataset contains 49 columns and 775,311 rows, which I believe meets the complexity requirements for this assignment. 32 variables are categorical, and 17 are numeric. 22 of the 49 variables are complete with no missing values. About half of variables with missing values are missing no more 1-3% of observations, but the other half (10 variables total) are missing upwards of 50% of their variables. These I may ignore in my analysis as the present data is likely too limited to make valid extrapolations from. Otherwise, I do not believe missingness will be a significant barrier in my analysis. Of the variables with large numbers of missing observations, they primarily relate to what I believe are auxiliary details that are less relevant to my research question. Even if I do not use some rows altogether, I believe there is enough data to provide substantial work for an exploratory data analysis. I would also like to note that most categorical variables come pre-factored into standardized responses so that there are not many unique observations even amongst the vast number of total observations, which reduces the need for data tidying. 
+
 
 ## Potential data issues
 
-Blah blah blah
+I anticipate using the longitude and latitude variables to join onto a future dataset containing map data, but these variables are not amongst the complete variables. However, they are each only missing approximately 5,100 observations, which should not impact the overall conclusions I make if I filter these observations out.
+
+I may also need to seek help from the instructional team on the logistics of completing such a merge, as I remember using GIS data was one of the more challenging parts of the course in Data Visualization. However, I am confident that I will be able to overcome this as I dealt with GIS data in my STAT 302 final project.
 
 ## Misc
 
-Blah Blah
+Another potential direction I may take this project is to look closely at traffic in Chinatown. I am a member of a club which deals with health activism and health-related community issues in Chinatown, and if there are observations in this dataset that is relevant to our club goals (for example, if I notice a particularly high concentration of crashes in or around the area), I may use this project to investigate.
