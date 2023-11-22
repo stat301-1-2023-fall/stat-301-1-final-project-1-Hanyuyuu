@@ -25,20 +25,20 @@ from: markdown+emoji
 :::
 ## Basic objectives
 
-### Objective 2
-As a .csv file, the dataset lacked important metadat about each variable, so my first instance of cleaning involved going through the dataset to find those which would be useful to convert to into factors, logicals, and datetimes. To do so I used a series of `for` loops inspired by L11 Exercise 10.
+### Data Cleaning
+Although my dataset came fairly complete and mostly tidy from the source, it lacked important metadata about each variable as it was stored in a `.csv` file. My cleaning of the data involved going through the dataset to find variables which would be useful to convert to into factors, logicals, and datetimes. To do so I used a series of `for` loops inspired by L11 Exercise 10.
 
-
-Demonstrating significant progress means students should have some univariate and bivariate analyses complete for several of their variables.  
-
-
-They should share a few graphics and/or tables with a description of what they have found thus far. 
-
-Students should should clearly state what they are exploring and why in these demonstrations. That is, they should share the guiding curiosity or research question that accompanies the particular graphics and/or tables they choose to share. 
+what they are exploring and why in these demonstrations. That is, they should share the guiding curiosity or research question that accompanies the particular graphics and/or tables they choose to share. 
 
 ### My progress
+To begin my EDA, I borrowed code from L11 Exercise 9 to generate quick barcharts and histograms of all factor and numerical variables.
+
+
 ### My Findings
+share a few graphics and/or tables with a description of what they have found thus far. 
  Use html tables.
  include where you are at
+ 
+ 
 ### Next Steps
 When thinking or describing next steps students should share any guiding curiosities or research questions they plan to explore.

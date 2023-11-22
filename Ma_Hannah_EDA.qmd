@@ -30,6 +30,7 @@ convert_to_factor <- c("traffic_control_device",
                        "work_zone_type",
                        "most_severe_injury"
                        )
+
 for(var in convert_to_factor){
   traffic <- traffic |> 
     mutate({{var}} := as.factor(!!sym(var)))
@@ -49,28 +50,25 @@ convert_to_datetime <- c("crash_date", "date_police_notified")
 for(var in convert_to_datetime){
   traffic <- traffic |> 
     mutate({{var}} := parse_date_time(!!sym(var), orders = "%m/%d/%Y %I:%M:%S %p"))
-  }
-```
-## Numeric plots
-```{r}
-#| label: num-plots
-#numeric_plots <- c("crash_hour", "crash_week", "crash_month", "injuries_no_indication", "injuries_unknown", "num_units")
-#traffic_no_id <- traffic |> 
-#  select(-crash_record_id, -rd_no, -(street_no:street_name), -(latitude:location), -beat_of_occurrence)
+}
 
-for (var in colnames(traffic)) {
-  if (class(traffic[[{{var}}]]) == "factor"){
-     label <- rlang::englue("A barchart of {{var}}")
-     factor_plot <- 
-       ggplot(traffic, aes(x = !!sym(var))) +
-       geom_bar() +
-       theme_minimal() +
-       labs(title = label)
-     ggsave(paste(var, "_distribution.png", sep = ""),
-            factor_plot,
-            path = "./plots")
-     }
-  else if (class(traffic[[{{var}}]]) == "numeric") {
+#create delay variable
+traffic <- traffic |> 
+  mutate(delay = (date_police_notified - crash_date)/ddays(1),
+         delay_bins = cut(delay, 
+                          breaks = c(0, 1, 7, 30, 365, 730, 1095, 1460, 1825, 2190, 2555, 2920, 3285),
+                          labels = c("day", "week", "month", "year", "2 years", "3 years", "4 years", "5 years", "6 years", "7 years", "8 years", "9 years"),
+                          ordered_result = T,
+                          include.lowest = T)) 
+
+write_rds(traffic, "data/traffic_data.rds")
+traffic <- read_rds("data/traffic_data.rds")
+```
+
+## Numeric variable plots
+```{r}
+#| label: numeric-plots
+for (var in traffic |> select(is.numeric) |> colnames()) {
     label <- rlang::englue("A histogram of {{var}}")
     numeric_plot <- 
       ggplot(traffic, aes(x = !!sym(var))) +
@@ -79,16 +77,40 @@ for (var in colnames(traffic)) {
            numeric_plot,
            path = "./plots")
     }
-  else{NULL}
-}
 
 ```
 
 ## Factor plots
+```{r}
+for (var in convert_to_factor) {
+  label <- rlang::englue("A barchart of {{var}}")
+     factor_plot <- 
+       ggplot(traffic, aes(x = !!sym(var))) +
+       geom_bar() +
+       coord_flip() +
+       labs(title = label)
+     ggsave(paste(var, "_distribution.png", sep = ""),
+            factor_plot,
+            path = "./plots")
+     }
+```
 
 ## Datetime plots
 ```{r}
 #| label: datetime-plots
 
-```
+for (interval in levels(traffic$delay_bins)){
+  delay_plot <- traffic |> 
+    filter(delay_bins == interval) |> 
+    ggplot(aes(delay)) +
+    geom_histogram()
+  ggsave(paste(interval, "_distribution.png", sep = ""),
+         delay_plot,
+         path = "./plots")
+}
 
+
+ggplot(traffic, aes(delay)) +
+  geom_histogram(bins = 250) +
+  coord_cartesian(ylim = c(0, 25))
+```
