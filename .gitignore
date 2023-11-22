@@ -33,7 +33,7 @@
 
 #data files that are too large
 data/raw/traffic_crashes.csv
-
+data/traffic_data.rds
 
 
 # ignore files (likely datasets or graphics) if too large (> 100 MB)

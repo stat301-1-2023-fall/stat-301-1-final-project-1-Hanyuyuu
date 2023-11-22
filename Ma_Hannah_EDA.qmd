@@ -54,7 +54,34 @@ for(var in convert_to_datetime){
 ## Numeric plots
 ```{r}
 #| label: num-plots
-numeric_plots <- c("crash_hour", "crash_week", "crash_month", "injuries_no_indication", "injuries_unknown", "num_units")
+#numeric_plots <- c("crash_hour", "crash_week", "crash_month", "injuries_no_indication", "injuries_unknown", "num_units")
+#traffic_no_id <- traffic |> 
+#  select(-crash_record_id, -rd_no, -(street_no:street_name), -(latitude:location), -beat_of_occurrence)
+
+for (var in colnames(traffic)) {
+  if (class(traffic[[{{var}}]]) == "factor"){
+     label <- rlang::englue("A barchart of {{var}}")
+     factor_plot <- 
+       ggplot(traffic, aes(x = !!sym(var))) +
+       geom_bar() +
+       theme_minimal() +
+       labs(title = label)
+     ggsave(paste(var, "_distribution.png", sep = ""),
+            factor_plot,
+            path = "./plots")
+     }
+  else if (class(traffic[[{{var}}]]) == "numeric") {
+    label <- rlang::englue("A histogram of {{var}}")
+    numeric_plot <- 
+      ggplot(traffic, aes(x = !!sym(var))) +
+      geom_histogram(bins = 20)
+    ggsave(paste(var, "_distribution.png", sep = ""), 
+           numeric_plot,
+           path = "./plots")
+    }
+  else{NULL}
+}
+
 ```
 
 ## Factor plots
