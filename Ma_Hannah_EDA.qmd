@@ -1,0 +1,67 @@
+---
+title: "Traffic Crashes EDA"
+format: html
+editor: source
+---
+
+```{r}
+#| label: data-tidying
+#| warning: false
+# reading in data
+library(tidyverse)
+traffic <- read_csv("data/raw/traffic_crashes.csv") |>
+  janitor::clean_names() 
+
+# convert appropriate variables to factor
+convert_to_factor <- c("traffic_control_device", 
+                       "device_condition", 
+                       "weather_condition", 
+                       "lighting_condition",
+                       "first_crash_type", 
+                       "trafficway_type",
+                       "alignment",
+                       "roadway_surface_cond",
+                       "road_defect",
+                       "report_type",
+                       "crash_type",
+                       "damage",
+                       "prim_contributory_cause",
+                       "sec_contributory_cause",
+                       "work_zone_type",
+                       "most_severe_injury"
+                       )
+for(var in convert_to_factor){
+  traffic <- traffic |> 
+    mutate({{var}} := as.factor(!!sym(var)))
+  }
+
+# convert appropriate variables to boolean
+convert_to_bool <- traffic |> select((ends_with("_i"))) |> colnames()
+
+for(var in convert_to_bool){
+  traffic <- traffic |> 
+    mutate({{var}} := if_else(!!sym(var) == "Y", TRUE, FALSE, missing = NA))
+  }
+
+# convert appropriate variables to datetime
+convert_to_datetime <- c("crash_date", "date_police_notified")
+
+for(var in convert_to_datetime){
+  traffic <- traffic |> 
+    mutate({{var}} := parse_date_time(!!sym(var), orders = "%m/%d/%Y %I:%M:%S %p"))
+  }
+```
+## Numeric plots
+```{r}
+#| label: num-plots
+numeric_plots <- c("crash_hour", "crash_week", "crash_month", "injuries_no_indication", "injuries_unknown", "num_units")
+```
+
+## Factor plots
+
+## Datetime plots
+```{r}
+#| label: datetime-plots
+
+```
+
