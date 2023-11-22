@@ -23,22 +23,42 @@ from: markdown+emoji
 
 <https://github.com/stat301-1-2023-fall/final-project-1-Hanyuyuu>
 :::
-## Basic objectives
+
+```{r}
+library(tidyverse)
+library(cowplot)
+```
+
 
 ### Data Cleaning
+
 Although my dataset came fairly complete and mostly tidy from the source, it lacked important metadata about each variable as it was stored in a `.csv` file. My cleaning of the data involved going through the dataset to find variables which would be useful to convert to into factors, logicals, and datetimes. To do so I used a series of `for` loops inspired by L11 Exercise 10.
 
-what they are exploring and why in these demonstrations. That is, they should share the guiding curiosity or research question that accompanies the particular graphics and/or tables they choose to share. 
+what they are exploring and why in these demonstrations. That is, they should share the guiding curiosity or research question that accompanies the particular graphics and/or tables they choose to share.
 
 ### My progress
-To begin my EDA, I borrowed code from L11 Exercise 9 to generate quick barcharts and histograms of all factor and numerical variables.
 
+To begin my EDA, I borrowed code from L11 Exercise 9 to generate quick bar charts and histograms to visualize the distributions of all factor and numerical variables.
+
+```{r}
+
+years <- ggplot(traffic, aes(delay)) +
+  geom_histogram(bins = 250) +
+  coord_cartesian(ylim = c(0, 25))
+```
+
+
+![](plots/week_distribution.png){width="303"}
+
+
+![](plots/first_crash_type_distribution.png)
 
 ### My Findings
-share a few graphics and/or tables with a description of what they have found thus far. 
- Use html tables.
- include where you are at
- 
- 
+
+![](plots/prim_contributory_cause_distribution.png)
+
+share a few graphics and/or tables with a description of what they have found thus far. Use html tables. include where you are at
+
 ### Next Steps
+
 When thinking or describing next steps students should share any guiding curiosities or research questions they plan to explore.
