@@ -25,10 +25,12 @@ from: markdown+emoji
 :::
 
 ```{r}
+#| label: load-pkgs
+#| echo: false
 library(tidyverse)
-library(cowplot)
+library(patchwork)
+traffic <- read_rds("data/traffic_data.rds")
 ```
-
 
 ### Data Cleaning
 
@@ -38,27 +40,51 @@ what they are exploring and why in these demonstrations. That is, they should sh
 
 ### My progress
 
-To begin my EDA, I borrowed code from L11 Exercise 9 to generate quick bar charts and histograms to visualize the distributions of all factor and numerical variables.
+To begin my EDA, I borrowed code from L11 Exercise 9 to generate quick bar charts and histograms to visualize the distributions of all factor and numerical variables. My research question from the first progress memo was investigating the **primary predictors of traffic incidents in Chicago,** which I did not realize was recorded as a variable already in the dataset. Below are very rough barplots of the distribution of the primary and secondary contributory causes of crashes in the dataset:
+
+![](plots/factor/prim_contributory_cause_distribution.png)
+
+![](plots/factor/sec_contributory_cause_distribution.png)
+
+Seeing that the primary and secondary contributory causes recorded in this dataset were either not-applicable or undetermined was quite unsatisfying. The lack of unexpected results was a trend found in the distribution of lighting conditions, road defects, and most severe injury.
+
+![](plots/factor/lighting_condition_distribution.png) ![](plots/factor/road_defect_distribution.png)
+
+![](plots/factor/most_severe_injury_distribution.png)
+
+Such plots reveal that most crashes, fortunately, do not appear to be due to extreme weather or road conditions, and most are not incredibly serious.
+
+Thus, I would like to change the direction of my EDA from this point onwards into investigating the **primary predictors of particular intensities of crashes**, based on the `most_severe_injury` plot above, **and particular types of crashes**, based upon the `prim_contributory_cause` plot. For example, what conditions correlate with crashes due to a failure to reduce vehicle speed? How intense, typically are these kinds of crashes? Viewing the dataset with a more specific lense may help me develop more concrete findings. One particular direction I can envision myself taking this project is looking solely at "failure to yield right-of-way" crashes. Such crashes might be due to an inability to see an oncoming car or pedestrian, and as I will be integrating map data into this project, I may be able to find certain areas where these types of crashes are concentrated, which could elucidate design faults in the roads at these areas.
+
+### Other Interesting Findings
+
+The only two datetime variables in this dataset record when a crash occurs and when it is reported to police, so I thought it would be interesting to subtract the two and look at delay trends. I found that within each unit of time (within a day, week, year, two years, etc.) delays are concentrated towards the beginning of that period of time, shown by the right-skewness of the plots below. However, if one looks more closely at longer periods of time, there is a curious grouping pattern which reveals that crashes are reported at "round" intervals of time (1 complete day, 2 complete days, 1 complete year, etc.) after the crash. This is particularly evident in the middle plot which shows the distribution of reporting delays throughout the week.
 
 ```{r}
+#| label: delay-plots
+#| echo: false
+dy <- traffic |> 
+    filter(delay_bins == "day") |> 
+    ggplot(aes(delay)) +
+    geom_histogram() +
+  labs(title = "Day")
 
-years <- ggplot(traffic, aes(delay)) +
+wk <- traffic |> 
+    filter(delay_bins == "week") |> 
+    ggplot(aes(delay)) +
+    geom_histogram() +
+  labs(title = "Week")
+
+yr <- ggplot(traffic, aes(delay)) +
   geom_histogram(bins = 250) +
-  coord_cartesian(ylim = c(0, 25))
+  coord_cartesian(ylim = c(0, 25)) +
+   labs(title = "All crashes")
+
+dy + wk + yr
 ```
-
-
-![](plots/week_distribution.png){width="303"}
-
-
-![](plots/first_crash_type_distribution.png)
-
-### My Findings
-
-![](plots/prim_contributory_cause_distribution.png)
-
-share a few graphics and/or tables with a description of what they have found thus far. Use html tables. include where you are at
 
 ### Next Steps
 
-When thinking or describing next steps students should share any guiding curiosities or research questions they plan to explore.
+My next steps are to look closer at multivariate analyses using the guiding question presented above and to work on mapping the data using the `tigris` package as I mentioned in the first memo. My guiding question for the multivariate analyses **will be what are the best predictors of different severities and types of crashes**, based on the `most_severe_injury_distribution` shown above.
+
+I will spend some time over Thanksgiving Break to join the `tigris` data with crashes which have recorded longitudes and latitudes, and then spend reading week fine-tuning my key visualizations and the final presentation of my work. I intend to make the early-submission deadline.

@@ -75,7 +75,7 @@ for (var in traffic |> select(is.numeric) |> colnames()) {
       geom_histogram(bins = 20)
     ggsave(paste(var, "_distribution.png", sep = ""), 
            numeric_plot,
-           path = "./plots")
+           path = "./plots/numeric")
     }
 
 ```
@@ -91,7 +91,7 @@ for (var in convert_to_factor) {
        labs(title = label)
      ggsave(paste(var, "_distribution.png", sep = ""),
             factor_plot,
-            path = "./plots")
+            path = "./plots/factor")
      }
 ```
 
