@@ -36,8 +36,6 @@ traffic <- read_rds("data/traffic_data.rds")
 
 Although my dataset came fairly complete and mostly tidy from the source, it lacked important metadata about each variable as it was stored in a `.csv` file. My cleaning of the data involved going through the dataset to find variables which would be useful to convert to into factors, logicals, and datetimes. To do so I used a series of `for` loops inspired by L11 Exercise 10.
 
-what they are exploring and why in these demonstrations. That is, they should share the guiding curiosity or research question that accompanies the particular graphics and/or tables they choose to share.
-
 ### My progress
 
 To begin my EDA, I borrowed code from L11 Exercise 9 to generate quick bar charts and histograms to visualize the distributions of all factor and numerical variables. My research question from the first progress memo was investigating the **primary predictors of traffic incidents in Chicago,** which I did not realize was recorded as a variable already in the dataset. Below are very rough barplots of the distribution of the primary and secondary contributory causes of crashes in the dataset:
@@ -49,8 +47,19 @@ To begin my EDA, I borrowed code from L11 Exercise 9 to generate quick bar chart
 Seeing that the primary and secondary contributory causes recorded in this dataset were either not-applicable or undetermined was quite unsatisfying. The lack of unexpected results was a trend found in the distribution of lighting conditions, road defects, and most severe injury.
 
 ![](plots/factor/lighting_condition_distribution.png) ![](plots/factor/road_defect_distribution.png)
-
 ![](plots/factor/most_severe_injury_distribution.png)
+
+```{r}
+#| label: cor-matrix
+#| echo: false
+
+traffic |> 
+  filter(most_severe_injury == "FATAL") |> 
+  select(where(is.numeric), -lane_cnt, -(injuries_total:injuries_unknown), -beat_of_occurrence) |> 
+  cor() |> 
+  round(digits = 3) |> 
+  knitr::kable()
+```
 
 Such plots reveal that most crashes, fortunately, do not appear to be due to extreme weather or road conditions, and most are not incredibly serious.
 
@@ -87,4 +96,4 @@ dy + wk + yr
 
 My next steps are to look closer at multivariate analyses using the guiding question presented above and to work on mapping the data using the `tigris` package as I mentioned in the first memo. My guiding question for the multivariate analyses **will be what are the best predictors of different severities and types of crashes**, based on the `most_severe_injury_distribution` shown above.
 
-I will spend some time over Thanksgiving Break to join the `tigris` data with crashes which have recorded longitudes and latitudes, and then spend reading week fine-tuning my key visualizations and the final presentation of my work. I intend to make the early-submission deadline.
+I will spend some time over Thanksgiving Break to continue my analyses and joining the `tigris` data with crashes which have recorded longitudes and latitudes, and then spend reading week fine-tuning my key visualizations and the final presentation of my work. I intend to make the early-submission deadline.
