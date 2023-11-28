@@ -24,7 +24,6 @@ for (var in convert_to_factor) {
          path = "./plots/factor")
 }
 
-
 ## Datetime variable plots
 
 for (interval in levels(traffic$delay_bins)){
