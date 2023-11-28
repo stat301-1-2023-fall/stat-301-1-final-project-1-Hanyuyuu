@@ -1,3 +1,15 @@
+### 2 - Univariate Analysis #####
+library(tidyverse)
+traffic <- read_rds("data/traffic_data.rds")
+convert_to_factor <- c("traffic_control_device", "device_condition", "weather_condition", 
+                       "lighting_condition", "first_crash_type", "trafficway_type",
+                       "alignment", "roadway_surface_cond", "road_defect", "report_type",
+                       "crash_type", "damage", "prim_contributory_cause", "sec_contributory_cause",
+                       "work_zone_type", "most_severe_injury")
+convert_to_bool <- traffic |> select((ends_with("_i"))) |> colnames()
+
+convert_to_datetime <- c("crash_date", "date_police_notified")
+
 ### Numeric variable plots
 
 for (var in traffic |> select(is.numeric) |> colnames()) {
@@ -33,7 +45,7 @@ for (interval in levels(traffic$delay_bins)){
     geom_histogram()
   ggsave(paste(interval, "_distribution.png", sep = ""),
          delay_plot,
-         path = "./plots")
+         path = "./plots/datetime")
 }
 
 #ggplot(traffic, aes(delay)) +
