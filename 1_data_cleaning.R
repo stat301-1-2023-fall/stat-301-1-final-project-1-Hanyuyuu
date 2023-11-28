@@ -1,18 +1,9 @@
----
-title: "Traffic Crashes EDA"
-format: html
-editor: source
----
-
-```{r}
-#| label: data-tidying
-#| warning: false
-# reading in data
+### Read in data
 library(tidyverse)
 traffic <- read_csv("data/raw/traffic_crashes.csv") |>
   janitor::clean_names() 
 
-# convert appropriate variables to factor
+### Convert appropriate variables to factor
 convert_to_factor <- c("traffic_control_device", 
                        "device_condition", 
                        "weather_condition", 
@@ -29,22 +20,22 @@ convert_to_factor <- c("traffic_control_device",
                        "sec_contributory_cause",
                        "work_zone_type",
                        "most_severe_injury"
-                       )
+)
 
 for(var in convert_to_factor){
   traffic <- traffic |> 
     mutate({{var}} := as.factor(!!sym(var)))
-  }
+}
 
-# convert appropriate variables to boolean
+### Convert appropriate variables to boolean
 convert_to_bool <- traffic |> select((ends_with("_i"))) |> colnames()
 
 for(var in convert_to_bool){
   traffic <- traffic |> 
     mutate({{var}} := if_else(!!sym(var) == "Y", TRUE, FALSE, missing = NA))
-  }
+}
 
-# convert appropriate variables to datetime
+### Convert appropriate variables to datetime
 convert_to_datetime <- c("crash_date", "date_police_notified")
 
 for(var in convert_to_datetime){
@@ -52,7 +43,7 @@ for(var in convert_to_datetime){
     mutate({{var}} := parse_date_time(!!sym(var), orders = "%m/%d/%Y %I:%M:%S %p"))
 }
 
-#create delay variable
+### Create delay variable
 traffic <- traffic |> 
   mutate(delay = (date_police_notified - crash_date)/ddays(1),
          delay_bins = cut(delay, 
@@ -60,57 +51,6 @@ traffic <- traffic |>
                           labels = c("day", "week", "month", "year", "2 years", "3 years", "4 years", "5 years", "6 years", "7 years", "8 years", "9 years"),
                           ordered_result = T,
                           include.lowest = T)) 
-
+### Store cleaned data
 write_rds(traffic, "data/traffic_data.rds")
 traffic <- read_rds("data/traffic_data.rds")
-```
-
-## Numeric variable plots
-```{r}
-#| label: numeric-plots
-for (var in traffic |> select(is.numeric) |> colnames()) {
-    label <- rlang::englue("A histogram of {{var}}")
-    numeric_plot <- 
-      ggplot(traffic, aes(x = !!sym(var))) +
-      geom_histogram(bins = 20)
-    ggsave(paste(var, "_distribution.png", sep = ""), 
-           numeric_plot,
-           path = "./plots/numeric")
-    }
-
-```
-
-## Factor plots
-```{r}
-for (var in convert_to_factor) {
-  label <- rlang::englue("A barchart of {{var}}")
-     factor_plot <- 
-       ggplot(traffic, aes(x = !!sym(var))) +
-       geom_bar() +
-       coord_flip() +
-       labs(title = label)
-     ggsave(paste(var, "_distribution.png", sep = ""),
-            factor_plot,
-            path = "./plots/factor")
-     }
-```
-
-## Datetime plots
-```{r}
-#| label: datetime-plots
-
-for (interval in levels(traffic$delay_bins)){
-  delay_plot <- traffic |> 
-    filter(delay_bins == interval) |> 
-    ggplot(aes(delay)) +
-    geom_histogram()
-  ggsave(paste(interval, "_distribution.png", sep = ""),
-         delay_plot,
-         path = "./plots")
-}
-
-
-ggplot(traffic, aes(delay)) +
-  geom_histogram(bins = 250) +
-  coord_cartesian(ylim = c(0, 25))
-```
