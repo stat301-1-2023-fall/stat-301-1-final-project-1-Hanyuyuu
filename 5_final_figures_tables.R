@@ -1,8 +1,8 @@
 ### 5 - Finalized Figures and Tables #####
 
 library(tidyverse)
-library(patchwork)
 traffic <- read_rds("data/traffic_data.rds")
+injuries <- read_rds("data/injuries.rds")
 
 ### At a Glance - Most Severe Injury Distribution
 most_severe_injury_distribution <- ggplot(traffic, aes(most_severe_injury)) +
@@ -17,31 +17,24 @@ most_severe_injury_distribution <- ggplot(traffic, aes(most_severe_injury)) +
   labs(y = "Count",
        x = "Most Severe Injury")
 
-ggsave("at_a_glance_most_severe_injury_distribution.png",
-       most_severe_injury_distribution,
-       path = "plots/final")
-
 ### At a Glance - Device, Roadway Surface, Lighting, and Weather Conditions
 
-for (var in c("device_condition", "weather_condition")) {
-  # lims <- traffic |> 
-  #   count(!!sym(var)) |> 
-  #   arrange(desc(n)) |>
-  #   select(!!sym(var))
-  plot <- ggplot(traffic, aes(x = !!sym(var))) +
-    geom_bar() +
-    # scale_x_discrete(limits = lims[[{{var}}]]) +
-    theme(axis.text.x = element_text(angle = 10, vjust = 1, hjust = 1)) +
-    labs(y = "Count")
-  print(plot)
-}
+road <- ggplot(traffic, aes(roadway_surface_cond)) +
+  geom_bar() +
+  scale_x_discrete(limits = rev(c("DRY",                 
+                                  "WET",                 
+                                  "UNKNOWN",             
+                                  "SNOW OR SLUSH",       
+                                  "ICE",                 
+                                  "OTHER",               
+                                  "SAND, MUD, DIRT"))) +
+  coord_flip() +
+  labs(y = "Count",
+       x = "Road Surface Condition")
 
-glimpse(traffic$weather_condition)
- #ggsave(paste({{var}}, "plot_polished.png", sep = ""),
- #       plot,
- #       path = "./plots")
+#Device Condition
 
-ggplot(traffic, aes(device_condition)) +
+device <- ggplot(traffic, aes(device_condition)) +
   geom_bar() +
   scale_x_discrete(limits = rev(c("NO CONTROLS",
                                   "FUNCTIONING PROPERLY",
@@ -55,7 +48,9 @@ ggplot(traffic, aes(device_condition)) +
   labs(y = "Count",
        x = "Device Condition")
 
-ggplot(traffic, aes(weather_condition)) +
+#Weather Condition
+
+weather <- ggplot(traffic, aes(weather_condition)) +
   geom_bar() +
   scale_x_discrete(limits = rev(c("CLEAR",                    
                                   "RAIN",                      
@@ -73,8 +68,22 @@ ggplot(traffic, aes(weather_condition)) +
   labs(y = "Count",
        x = "Weather Condition")
 
+#Lighting Condition
+
+lighting <- ggplot(traffic, aes(x = lighting_condition)) +
+  geom_bar() +
+  scale_x_discrete(limits = c("DAYLIGHT",              
+                              "DARKNESS, LIGHTED ROAD",
+                              "DARKNESS",              
+                              "UNKNOWN",               
+                              "DUSK",                  
+                              "DAWN" )) +
+  theme(axis.text.x = element_text(angle = 10, vjust = 1, hjust = 1)) +
+  labs(y = "Count",
+       x = "Lighting Condition")
+
 ### At a Glance - First Crash Type Distribution
-ggplot(traffic, aes(first_crash_type)) +
+first_crash <- ggplot(traffic, aes(first_crash_type)) +
   geom_bar() +
   scale_x_discrete(limits = rev(c("PARKED MOTOR VEHICLE",        
                               "REAR END",                    
@@ -112,7 +121,7 @@ sec_cause <- traffic |>
   kableExtra::kable_styling(full_width = FALSE, position = "left")
 
 ### At a Glance - Crash day of week, hour, and month
-traffic |> 
+crash_day <- traffic |> 
   select(crash_day_of_week) |> 
   mutate(crash_day_of_week := wday(crash_day_of_week, label = T, abbr = F)) |> 
   ggplot(aes(crash_day_of_week)) +
@@ -120,12 +129,12 @@ traffic |>
   labs(y = "Count",
        x = "Day of the Week")
 
-ggplot(traffic, aes(crash_hour)) +
+crash_hour <- ggplot(traffic, aes(crash_hour)) +
   geom_bar() +
   labs(y = "Count",
        x = "Hour of Crash (24 Hour Cycle)")
 
-traffic |> 
+crash_month <- traffic |> 
   select(crash_month) |> 
   mutate(crash_month := month(crash_month, label = T)) |> 
   ggplot(aes(crash_month)) +
@@ -150,5 +159,3 @@ injuries |>
   coord_flip() +
   labs(y = "Sum",
        x = "Injury Type")
-
-## logical: hit and run, intersection related, not right of way 
