@@ -36,7 +36,20 @@ for (var in convert_to_factor) {
          path = "./plots/factor")
 }
 
-## Datetime variable plots
+### Logical variable plots
+for (var in convert_to_bool) {
+  label <- rlang::englue("A barchart of {{var}}")
+  lgl_plot <- 
+    ggplot(traffic, aes(x = !!sym(var))) +
+    geom_bar() +
+    coord_flip() +
+    labs(title = label)
+  ggsave(paste(var, "_distribution.png", sep = ""),
+         lgl_plot,
+         path = "./plots/logical")
+}
+
+### Datetime variable plots
 
 for (interval in levels(traffic$delay_bins)){
   delay_plot <- traffic |> 
@@ -48,6 +61,20 @@ for (interval in levels(traffic$delay_bins)){
          path = "./plots/datetime")
 }
 
-#ggplot(traffic, aes(delay)) +
-#  geom_histogram(bins = 250) +
-#  coord_cartesian(ylim = c(0, 25))
+### Distribution of delay between time of crash and time of report to police 
+all_delay <- ggplot(traffic, aes(delay)) +
+  geom_histogram(bins = 250) +
+  coord_cartesian(ylim = c(0, 25))
+ggsave("delay_distribution.png",
+       all_delay,
+       path = "./plots/datetime")
+
+### Distribution of injuries all together
+injuries |> 
+  ggplot(aes(injury_type)) +
+  geom_bar()
+
+injuries |> group_by(injury_type) |> summarize(sum(value, na.rm = T))
+#ggsave("delay_distribution.png",
+#       all_delay,
+#       path = "./plots/datetime")

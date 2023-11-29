@@ -1,0 +1,7 @@
+---
+title: "Traffic Data EDA Executive Summary"
+format: html
+editor: source
+---
+
+An executive summary should summarize the key points of the report. It should restate the purpose of the report, highlight the major results, and summarize any conclusions. This report should be concise and clearly written. If you are unsure how to write an Executive Summary there are a lot of resources on the internet! Consider visiting the writing center if you need help.

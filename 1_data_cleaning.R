@@ -51,6 +51,17 @@ traffic <- traffic |>
                           labels = c("day", "week", "month", "year", "2 years", "3 years", "4 years", "5 years", "6 years", "7 years", "8 years", "9 years"),
                           ordered_result = T,
                           include.lowest = T)) 
+
+### Subset injuries data
+injuries <- 
+  traffic |> 
+  select(crash_record_id, contains("injuries")) |> 
+  pivot_longer(cols = contains("injuries"),
+               names_to = "injury_type",
+               names_pattern = "injuries_(.*)",
+               values_to = "value")
+write_rds(injuries, "data/injuries.rds")
+
 ### Store cleaned data
 write_rds(traffic, "data/traffic_data.rds")
 traffic <- read_rds("data/traffic_data.rds")
