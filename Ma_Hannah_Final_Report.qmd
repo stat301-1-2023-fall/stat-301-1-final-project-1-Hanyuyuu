@@ -1,6 +1,9 @@
 ---
 title: "Traffic Crashes EDA"
-format: html
+format: 
+  html:
+   toc: true
+   embed-resources: true
 editor: source
 
 execute:
@@ -16,24 +19,71 @@ execute:
 
 
 ```{r}
-traffic
+#traffic |> naniar::miss_var_summary()
+
+traffic |> 
+  select(num_units, 
+         lane_cnt, 
+         posted_speed_limit, 
+         delay, 
+         crash_day_of_week, 
+         -longitude, 
+         -latitude, 
+         contains("injuries")) |> 
+  drop_na() |>
+  cor() |> 
+  round(digits = 3) |> 
+  knitr::kable()
 ```
-
-
-
 
 
 ### Introduction
 Overview of the EDA. What was the motivation for this analysis? What initial curiosities or research questions motivated you? Describe the data source(s) you will use to build a predictive model. If you are obtaining information from websites you should cite those in your References.
 
 ### Data overview & quality
-A concise high level overview of the dataset(s) being explored. Description of the dataset(s) that covers basics: size, number of observations, number, of variables, variable types, and discussion of any quality issues (especially missingness and how it may impact the analysis). Highlight any important data collection issues or concerns. If over-technical, but important, then place technical details in Appendix: technical info.
+A concise high level overview of the dataset(s) being explored.
+size, number of observations, number, of variables, variable types, and discussion of any quality issues 
+(especially missingness and how it may impact the analysis). 
+
+Highlight any important data collection issues or concerns. 
+
+If over-technical, but important, then place technical details in Appendix: technical info.
 
 ## Explorations
 
-Could decide to make sections for major parts of the EDA and not used an Explorations header. The key is that you have sections that are clearly organized and guide the reader through a systematic and thoughtful exploration of the dataset(s).
+### At First Glance
+The words "traffic crash" of conjure gruesome images of upturned cars, flashing police lights, twisted metal, and broken vehicle parts littering the street. The representative image of a "traffic accident" is likely for many readers to be reminiscent of the shocking images seen in driver's school used to scare new drivers into taking extra precaution on the road. Fortunately, this dataset reminds us that the vast majority of traffic accidents do not look like this. Univariate analysis of variables most relevant and/or salient to a traffic accident are presented below. First, notice that the overwhelming majority of traffic accidents do not lead to injury.
 
-A thoughtful exploration weaves together prose, figures, and tables to help a reader build understanding. It is a guided tour that should have clear motivations for each step in the process (think guiding curiosities or research questions). It should be clear how things build of of each other and why we are looking at what is being presented. Should also be letting the reader know whether what is shown is as expected or is it surprising (maybe some of each).
+injury dist
+
+devide, road, light, weather conditions
+
+types
+
+primary secondary causes
+
+crash day week hour
+
+. Thus, the remainder of the report will explore deeper connections between the variables which may lead to crashes at three different severities: those which produce no injury, those which produce incapacitating injury, and those which are fatal
+
+### What environment produces different kinds of crashes?
+
+### When are crashes occurring?
+
+### Why are crashes occurring?
+
+### How are crashes occurring?
+
+### Where are crashes occurring?
+### Aside: When are Crashes Being Reported?
+
+
+
+
+
+
+
+It should be clear how things build of of each other and why we are looking at what is being presented. Should also be letting the reader know whether what is shown is as expected or is it surprising (maybe some of each).
 
 You could imagine structuring this section around analysis type: univariate, bivariate, and multivariate. Can be a little harder to build a narrative with this structure. Could build sections that are dedicated to important variables: variable 1, variable 2, etc. In this case the sections would thoroughly explore the section’s variable through univariate, bivariate, and multivariate analyses. Alternatively, could build your sections around broad curiosities/research questions. Some of which probably inspired the project, and others that were developed through conducting the EDA.
 

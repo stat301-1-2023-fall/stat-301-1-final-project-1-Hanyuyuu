@@ -62,6 +62,7 @@ for (interval in levels(traffic$delay_bins)){
 }
 
 ### Distribution of delay between time of crash and time of report to police 
+
 all_delay <- ggplot(traffic, aes(delay)) +
   geom_histogram(bins = 250) +
   coord_cartesian(ylim = c(0, 25))
@@ -70,11 +71,13 @@ ggsave("delay_distribution.png",
        path = "./plots/datetime")
 
 ### Distribution of injuries all together
-injuries |> 
-  ggplot(aes(injury_type)) +
-  geom_bar()
+injury_dist <- injuries |> 
+  group_by(injury_type) |> 
+  summarize(sum = sum(value, na.rm = T)) |> 
+  ggplot(aes(injury_type, sum)) +
+  geom_col() +
+  coord_flip()
 
-injuries |> group_by(injury_type) |> summarize(sum(value, na.rm = T))
-#ggsave("delay_distribution.png",
-#       all_delay,
-#       path = "./plots/datetime")
+ggsave("sum_injuries.png",
+       injury_dist,
+       path = "./plots/numeric")
