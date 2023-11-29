@@ -2991,7 +2991,16 @@ vertical-align: -.125em;
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
   <li><a href="#data-overview-quality" id="toc-data-overview-quality" class="nav-link" data-scroll-target="#data-overview-quality">Data overview &amp; quality</a></li>
-  <li><a href="#explorations" id="toc-explorations" class="nav-link" data-scroll-target="#explorations">Explorations</a></li>
+  <li><a href="#explorations" id="toc-explorations" class="nav-link" data-scroll-target="#explorations">Explorations</a>
+  <ul class="collapse">
+  <li><a href="#at-first-glance" id="toc-at-first-glance" class="nav-link" data-scroll-target="#at-first-glance">At First Glance</a></li>
+  <li><a href="#what-environment-produces-different-kinds-of-crashes" id="toc-what-environment-produces-different-kinds-of-crashes" class="nav-link" data-scroll-target="#what-environment-produces-different-kinds-of-crashes">What environment produces different kinds of crashes?</a></li>
+  <li><a href="#when-are-crashes-occurring" id="toc-when-are-crashes-occurring" class="nav-link" data-scroll-target="#when-are-crashes-occurring">When are crashes occurring?</a></li>
+  <li><a href="#why-are-crashes-occurring" id="toc-why-are-crashes-occurring" class="nav-link" data-scroll-target="#why-are-crashes-occurring">Why are crashes occurring?</a></li>
+  <li><a href="#how-are-crashes-occurring" id="toc-how-are-crashes-occurring" class="nav-link" data-scroll-target="#how-are-crashes-occurring">How are crashes occurring?</a></li>
+  <li><a href="#where-are-crashes-occurring" id="toc-where-are-crashes-occurring" class="nav-link" data-scroll-target="#where-are-crashes-occurring">Where are crashes occurring?</a></li>
+  <li><a href="#aside-when-are-crashes-being-reported" id="toc-aside-when-are-crashes-being-reported" class="nav-link" data-scroll-target="#aside-when-are-crashes-being-reported">Aside: When are Crashes Being Reported?</a></li>
+  </ul></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   <li><a href="#references-if-needed" id="toc-references-if-needed" class="nav-link" data-scroll-target="#references-if-needed">References — if needed</a></li>
   <li><a href="#appendix-technical-info-if-needed" id="toc-appendix-technical-info-if-needed" class="nav-link" data-scroll-target="#appendix-technical-info-if-needed">Appendix: technical info — if needed</a></li>
@@ -3031,19 +3040,409 @@ Github Repo Link
 <p><a href="https://github.com/stat301-1-2023-fall/final-project-1-Hanyuyuu" class="uri">https://github.com/stat301-1-2023-fall/final-project-1-Hanyuyuu</a></p>
 </div>
 </div>
+<div id="tbl-anonymous-9175791" class="cell tbl-parent quarto-layout-panel anchored">
+<div class="panel-caption table-caption">
+<p>Tables of Primary and Secondary Contributory Causes in Chicago Traffic Crashes</p>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div id="tbl-anonymous-9175791-1" class="quarto-layout-cell quarto-layout-cell-subref anchored" data-ref-parent="tbl-anonymous-9175791" style="flex-basis: 50.0%;justify-content: center;">
+<table class="table table-sm table-striped small">
+<caption>Primary</caption>
+<colgroup>
+<col style="width: 92%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">prim_contributory_cause</th>
+<th style="text-align: right;">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">UNABLE TO DETERMINE</td>
+<td style="text-align: right;">300689</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FAILING TO YIELD RIGHT-OF-WAY</td>
+<td style="text-align: right;">84893</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FOLLOWING TOO CLOSELY</td>
+<td style="text-align: right;">76060</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">NOT APPLICABLE</td>
+<td style="text-align: right;">41059</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">IMPROPER OVERTAKING/PASSING</td>
+<td style="text-align: right;">38102</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FAILING TO REDUCE SPEED TO AVOID CRASH</td>
+<td style="text-align: right;">32798</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">IMPROPER BACKING</td>
+<td style="text-align: right;">30863</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">IMPROPER LANE USAGE</td>
+<td style="text-align: right;">27981</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DRIVING SKILLS/KNOWLEDGE/EXPERIENCE</td>
+<td style="text-align: right;">25747</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">IMPROPER TURNING/NO SIGNAL</td>
+<td style="text-align: right;">25735</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DISREGARDING TRAFFIC SIGNALS</td>
+<td style="text-align: right;">15060</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">WEATHER</td>
+<td style="text-align: right;">11708</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">OPERATING VEHICLE IN ERRATIC, RECKLESS, CARELESS, NEGLIGENT OR AGGRESSIVE MANNER</td>
+<td style="text-align: right;">9873</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DISREGARDING STOP SIGN</td>
+<td style="text-align: right;">8444</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DISTRACTION - FROM INSIDE VEHICLE</td>
+<td style="text-align: right;">5351</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EQUIPMENT - VEHICLE CONDITION</td>
+<td style="text-align: right;">4857</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PHYSICAL CONDITION OF DRIVER</td>
+<td style="text-align: right;">4656</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">VISION OBSCURED (SIGNS, TREE LIMBS, BUILDINGS, ETC.)</td>
+<td style="text-align: right;">4437</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DRIVING ON WRONG SIDE/WRONG WAY</td>
+<td style="text-align: right;">4109</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">UNDER THE INFLUENCE OF ALCOHOL/DRUGS (USE WHEN ARREST IS EFFECTED)</td>
+<td style="text-align: right;">3679</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DISTRACTION - FROM OUTSIDE VEHICLE</td>
+<td style="text-align: right;">3212</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EXCEEDING AUTHORIZED SPEED LIMIT</td>
+<td style="text-align: right;">1982</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ROAD ENGINEERING/SURFACE/MARKING DEFECTS</td>
+<td style="text-align: right;">1943</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ROAD CONSTRUCTION/MAINTENANCE</td>
+<td style="text-align: right;">1691</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EXCEEDING SAFE SPEED FOR CONDITIONS</td>
+<td style="text-align: right;">1684</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DISREGARDING OTHER TRAFFIC SIGNS</td>
+<td style="text-align: right;">1668</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EVASIVE ACTION DUE TO ANIMAL, OBJECT, NONMOTORIST</td>
+<td style="text-align: right;">1440</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CELL PHONE USE OTHER THAN TEXTING</td>
+<td style="text-align: right;">1045</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DISREGARDING ROAD MARKINGS</td>
+<td style="text-align: right;">953</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HAD BEEN DRINKING (USE WHEN ARREST IS NOT MADE)</td>
+<td style="text-align: right;">804</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ANIMAL</td>
+<td style="text-align: right;">650</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TURNING RIGHT ON RED</td>
+<td style="text-align: right;">575</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DISTRACTION - OTHER ELECTRONIC DEVICE (NAVIGATION DEVICE, DVD PLAYER, ETC.)</td>
+<td style="text-align: right;">365</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RELATED TO BUS STOP</td>
+<td style="text-align: right;">356</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TEXTING</td>
+<td style="text-align: right;">304</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DISREGARDING YIELD SIGN</td>
+<td style="text-align: right;">265</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PASSING STOPPED SCHOOL BUS</td>
+<td style="text-align: right;">92</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">OBSTRUCTED CROSSWALKS</td>
+<td style="text-align: right;">80</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">BICYCLE ADVANCING LEGALLY ON RED LIGHT</td>
+<td style="text-align: right;">79</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOTORCYCLE ADVANCING LEGALLY ON RED LIGHT</td>
+<td style="text-align: right;">22</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="tbl-anonymous-9175791-2" class="quarto-layout-cell quarto-layout-cell-subref anchored" data-ref-parent="tbl-anonymous-9175791" style="flex-basis: 50.0%;justify-content: center;">
+<table class="table table-sm table-striped small">
+<caption>Secondary</caption>
+<colgroup>
+<col style="width: 92%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">sec_contributory_cause</th>
+<th style="text-align: right;">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">NOT APPLICABLE</td>
+<td style="text-align: right;">317513</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">UNABLE TO DETERMINE</td>
+<td style="text-align: right;">280987</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FAILING TO REDUCE SPEED TO AVOID CRASH</td>
+<td style="text-align: right;">29238</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FAILING TO YIELD RIGHT-OF-WAY</td>
+<td style="text-align: right;">24065</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DRIVING SKILLS/KNOWLEDGE/EXPERIENCE</td>
+<td style="text-align: right;">23791</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FOLLOWING TOO CLOSELY</td>
+<td style="text-align: right;">20490</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">IMPROPER OVERTAKING/PASSING</td>
+<td style="text-align: right;">11826</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">IMPROPER LANE USAGE</td>
+<td style="text-align: right;">10915</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">WEATHER</td>
+<td style="text-align: right;">8870</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">IMPROPER TURNING/NO SIGNAL</td>
+<td style="text-align: right;">7882</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">IMPROPER BACKING</td>
+<td style="text-align: right;">6252</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">OPERATING VEHICLE IN ERRATIC, RECKLESS, CARELESS, NEGLIGENT OR AGGRESSIVE MANNER</td>
+<td style="text-align: right;">4928</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DISREGARDING TRAFFIC SIGNALS</td>
+<td style="text-align: right;">3133</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">VISION OBSCURED (SIGNS, TREE LIMBS, BUILDINGS, ETC.)</td>
+<td style="text-align: right;">2460</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PHYSICAL CONDITION OF DRIVER</td>
+<td style="text-align: right;">2408</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DISTRACTION - FROM INSIDE VEHICLE</td>
+<td style="text-align: right;">2342</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DISREGARDING STOP SIGN</td>
+<td style="text-align: right;">2276</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DRIVING ON WRONG SIDE/WRONG WAY</td>
+<td style="text-align: right;">1594</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EQUIPMENT - VEHICLE CONDITION</td>
+<td style="text-align: right;">1571</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EXCEEDING AUTHORIZED SPEED LIMIT</td>
+<td style="text-align: right;">1473</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EXCEEDING SAFE SPEED FOR CONDITIONS</td>
+<td style="text-align: right;">1438</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DISTRACTION - FROM OUTSIDE VEHICLE</td>
+<td style="text-align: right;">1301</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">UNDER THE INFLUENCE OF ALCOHOL/DRUGS (USE WHEN ARREST IS EFFECTED)</td>
+<td style="text-align: right;">1273</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HAD BEEN DRINKING (USE WHEN ARREST IS NOT MADE)</td>
+<td style="text-align: right;">966</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ROAD CONSTRUCTION/MAINTENANCE</td>
+<td style="text-align: right;">923</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DISREGARDING OTHER TRAFFIC SIGNS</td>
+<td style="text-align: right;">794</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DISREGARDING ROAD MARKINGS</td>
+<td style="text-align: right;">789</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ROAD ENGINEERING/SURFACE/MARKING DEFECTS</td>
+<td style="text-align: right;">770</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CELL PHONE USE OTHER THAN TEXTING</td>
+<td style="text-align: right;">586</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EVASIVE ACTION DUE TO ANIMAL, OBJECT, NONMOTORIST</td>
+<td style="text-align: right;">421</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ANIMAL</td>
+<td style="text-align: right;">367</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RELATED TO BUS STOP</td>
+<td style="text-align: right;">351</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TURNING RIGHT ON RED</td>
+<td style="text-align: right;">298</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DISTRACTION - OTHER ELECTRONIC DEVICE (NAVIGATION DEVICE, DVD PLAYER, ETC.)</td>
+<td style="text-align: right;">231</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">BICYCLE ADVANCING LEGALLY ON RED LIGHT</td>
+<td style="text-align: right;">227</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DISREGARDING YIELD SIGN</td>
+<td style="text-align: right;">198</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TEXTING</td>
+<td style="text-align: right;">140</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PASSING STOPPED SCHOOL BUS</td>
+<td style="text-align: right;">89</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">OBSTRUCTED CROSSWALKS</td>
+<td style="text-align: right;">80</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOTORCYCLE ADVANCING LEGALLY ON RED LIGHT</td>
+<td style="text-align: right;">55</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
 <section id="introduction" class="level3">
 <h3 class="anchored" data-anchor-id="introduction">Introduction</h3>
 <p>Overview of the EDA. What was the motivation for this analysis? What initial curiosities or research questions motivated you? Describe the data source(s) you will use to build a predictive model. If you are obtaining information from websites you should cite those in your References.</p>
 </section>
 <section id="data-overview-quality" class="level3">
 <h3 class="anchored" data-anchor-id="data-overview-quality">Data overview &amp; quality</h3>
-<p>A concise high level overview of the dataset(s) being explored. Description of the dataset(s) that covers basics: size, number of observations, number, of variables, variable types, and discussion of any quality issues (especially missingness and how it may impact the analysis). Highlight any important data collection issues or concerns. If over-technical, but important, then place technical details in Appendix: technical info.</p>
+<p>A concise high level overview of the dataset(s) being explored. size, number of observations, number, of variables, variable types, and discussion of any quality issues (especially missingness and how it may impact the analysis).</p>
+<p>Highlight any important data collection issues or concerns.</p>
+<p>If over-technical, but important, then place technical details in Appendix: technical info.</p>
 </section>
 <section id="explorations" class="level2">
 <h2 class="anchored" data-anchor-id="explorations">Explorations</h2>
-<p>Could decide to make sections for major parts of the EDA and not used an Explorations header. The key is that you have sections that are clearly organized and guide the reader through a systematic and thoughtful exploration of the dataset(s).</p>
-<p>A thoughtful exploration weaves together prose, figures, and tables to help a reader build understanding. It is a guided tour that should have clear motivations for each step in the process (think guiding curiosities or research questions). It should be clear how things build of of each other and why we are looking at what is being presented. Should also be letting the reader know whether what is shown is as expected or is it surprising (maybe some of each).</p>
+<section id="at-first-glance" class="level3">
+<h3 class="anchored" data-anchor-id="at-first-glance">At First Glance</h3>
+<p>The words “traffic crash” of conjure gruesome images of upturned cars, flashing police lights, twisted metal, and broken vehicle parts littering the street. The representative image of a “traffic accident” is likely for many readers to be reminiscent of the shocking images seen in driver’s school used to scare new drivers into taking extra precaution on the road. Fortunately, this dataset reminds us that the vast majority of traffic accidents do not look like this. Univariate analysis of variables most relevant and/or salient to a traffic accident are presented below. First, notice that the overwhelming majority of traffic accidents do not lead to injury.</p>
+<p>injury dist</p>
+<p>devide, road, light, weather conditions</p>
+<p>types</p>
+<p>primary secondary causes</p>
+<p>crash day week hour</p>
+<p>. Thus, the remainder of the report will explore deeper connections between the variables which may lead to crashes at three different severities: those which produce no injury, those which produce incapacitating injury, and those which are fatal</p>
+</section>
+<section id="what-environment-produces-different-kinds-of-crashes" class="level3">
+<h3 class="anchored" data-anchor-id="what-environment-produces-different-kinds-of-crashes">What environment produces different kinds of crashes?</h3>
+</section>
+<section id="when-are-crashes-occurring" class="level3">
+<h3 class="anchored" data-anchor-id="when-are-crashes-occurring">When are crashes occurring?</h3>
+</section>
+<section id="why-are-crashes-occurring" class="level3">
+<h3 class="anchored" data-anchor-id="why-are-crashes-occurring">Why are crashes occurring?</h3>
+</section>
+<section id="how-are-crashes-occurring" class="level3">
+<h3 class="anchored" data-anchor-id="how-are-crashes-occurring">How are crashes occurring?</h3>
+</section>
+<section id="where-are-crashes-occurring" class="level3">
+<h3 class="anchored" data-anchor-id="where-are-crashes-occurring">Where are crashes occurring?</h3>
+</section>
+<section id="aside-when-are-crashes-being-reported" class="level3">
+<h3 class="anchored" data-anchor-id="aside-when-are-crashes-being-reported">Aside: When are Crashes Being Reported?</h3>
+<p>It should be clear how things build of of each other and why we are looking at what is being presented. Should also be letting the reader know whether what is shown is as expected or is it surprising (maybe some of each).</p>
 <p>You could imagine structuring this section around analysis type: univariate, bivariate, and multivariate. Can be a little harder to build a narrative with this structure. Could build sections that are dedicated to important variables: variable 1, variable 2, etc. In this case the sections would thoroughly explore the section’s variable through univariate, bivariate, and multivariate analyses. Alternatively, could build your sections around broad curiosities/research questions. Some of which probably inspired the project, and others that were developed through conducting the EDA.</p>
+</section>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>

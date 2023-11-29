@@ -5,7 +5,7 @@ library(patchwork)
 traffic <- read_rds("data/traffic_data.rds")
 
 ### At a Glance - Most Severe Injury Distribution
-ggplot(traffic, aes(most_severe_injury)) +
+most_severe_injury_distribution <- ggplot(traffic, aes(most_severe_injury)) +
   geom_bar() +
   scale_x_discrete(limits = rev(c("NO INDICATION OF INJURY",
                                   "NONINCAPACITATING INJURY",
@@ -17,21 +17,26 @@ ggplot(traffic, aes(most_severe_injury)) +
   labs(y = "Count",
        x = "Most Severe Injury")
 
+ggsave("at_a_glance_most_severe_injury_distribution.png",
+       most_severe_injury_distribution,
+       path = "plots/final")
+
 ### At a Glance - Device, Roadway Surface, Lighting, and Weather Conditions
 
 for (var in c("device_condition", "weather_condition")) {
-  lims <- traffic |> 
-    count(!!sym(var)) |> 
-    arrange(desc(n)) |>
-    select(!!sym(var))
-  plot <- ggplot(traffic, aes(x ={{var}})) +
+  # lims <- traffic |> 
+  #   count(!!sym(var)) |> 
+  #   arrange(desc(n)) |>
+  #   select(!!sym(var))
+  plot <- ggplot(traffic, aes(x = !!sym(var))) +
     geom_bar() +
-    scale_x_discrete(limits = lims[[{{var}}]]) +
+    # scale_x_discrete(limits = lims[[{{var}}]]) +
     theme(axis.text.x = element_text(angle = 10, vjust = 1, hjust = 1)) +
-    labs(y = "Count",
-         x = "Device Condition")
+    labs(y = "Count")
   print(plot)
 }
+
+glimpse(traffic$weather_condition)
  #ggsave(paste({{var}}, "plot_polished.png", sep = ""),
  #       plot,
  #       path = "./plots")
@@ -96,12 +101,15 @@ ggplot(traffic, aes(first_crash_type)) +
 ### At a Glance - Primary and Secondary Contributory Causes Tables
 prim_cause <- traffic |> 
   count(prim_contributory_cause) |> 
-  arrange(desc(n)) |> knitr::kable()
+  arrange(desc(n)) |> 
+  knitr::kable() |> 
+  kableExtra::kable_styling(full_width = FALSE, position = "float_left")
 
 sec_cause <- traffic |> 
   count(sec_contributory_cause) |> 
-  arrange(desc(n)) |> knitr::kable()
-
+  arrange(desc(n)) |> 
+  knitr::kable() |> 
+  kableExtra::kable_styling(full_width = FALSE, position = "left")
 
 ### At a Glance - Crash day of week, hour, and month
 traffic |> 
@@ -142,8 +150,5 @@ injuries |>
   coord_flip() +
   labs(y = "Sum",
        x = "Injury Type")
-
-
-
 
 ## logical: hit and run, intersection related, not right of way 

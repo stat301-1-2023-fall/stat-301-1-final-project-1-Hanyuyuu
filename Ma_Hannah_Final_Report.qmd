@@ -19,23 +19,43 @@ execute:
 
 
 ```{r}
+
+library(tidyverse)
+traffic <- read_rds("data/traffic_data.rds")
 #traffic |> naniar::miss_var_summary()
 
-traffic |> 
-  select(num_units, 
-         lane_cnt, 
-         posted_speed_limit, 
-         delay, 
-         crash_day_of_week, 
-         -longitude, 
-         -latitude, 
-         contains("injuries")) |> 
-  drop_na() |>
-  cor() |> 
-  round(digits = 3) |> 
-  knitr::kable()
+# traffic |> 
+#   select(num_units, 
+#          lane_cnt, 
+#          posted_speed_limit, 
+#          delay, 
+#          crash_day_of_week, 
+#          -longitude, 
+#          -latitude, 
+#          contains("injuries")) |> 
+#   drop_na() |>
+#   cor() |> 
+#   round(digits = 3) |> 
+#   knitr::kable()
+
+
+
 ```
 
+```{r}
+#| layout-ncol: 2
+#| tbl-cap: "Tables of Primary and Secondary Contributory Causes in Chicago Traffic Crashes"
+#| tbl-subcap: ["Primary", "Secondary"]
+traffic |> 
+  count(prim_contributory_cause) |> 
+  arrange(desc(n)) |> 
+  knitr::kable(col.names = c("Primary Cause", "Count"))
+
+traffic |> 
+  count(sec_contributory_cause) |> 
+  arrange(desc(n)) |> 
+  knitr::kable()
+```
 
 ### Introduction
 Overview of the EDA. What was the motivation for this analysis? What initial curiosities or research questions motivated you? Describe the data source(s) you will use to build a predictive model. If you are obtaining information from websites you should cite those in your References.
@@ -64,7 +84,7 @@ primary secondary causes
 
 crash day week hour
 
-. Thus, the remainder of the report will explore deeper connections between the variables which may lead to crashes at three different severities: those which produce no injury, those which produce incapacitating injury, and those which are fatal
+. Thus, the remainder of the report will explore the crashes at three different severities: those which produce no injury, those which produce incapacitating injury, and those which are fatal
 
 ### What environment produces different kinds of crashes?
 
