@@ -216,9 +216,12 @@ traffic |>
 
 # Is there a difference in injury severity that is dependent upon weather? 
 traffic |> 
-  filter(most_severe_injury %in% c("NO INDICATION OF INJURY", "INCAPACITATING INJURY", "FATAL"),
+  filter(!(is.na(most_severe_injury)),
          weather_condition != "CLEAR",
-         weather_condition != "RAIN") |> 
+         weather_condition != "RAIN",
+         weather_condition != "UNKNOWN",
+         weather_condition != "SNOW",
+         weather_condition != "CLOUDY/OVERCAST") |> 
   count(most_severe_injury, weather_condition) |> 
   mutate(prop = n / sum(n), .by = most_severe_injury) |> 
   ggplot(aes(most_severe_injury, weather_condition)) +
@@ -229,4 +232,3 @@ test <- traffic |> slice_head(n = 100)
 ggplot(traffic, aes(posted_speed_limit, num_units)) +
   geom_point(position = position_jitter(width = 3, height = 0.5)) +
   facet_wrap(~most_severe_injury)
-

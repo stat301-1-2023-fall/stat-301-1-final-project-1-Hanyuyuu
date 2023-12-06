@@ -1,5 +1,11 @@
 ---
 title: "Traffic Crashes EDA"
+subtitle: |
+  | Final Project 
+  | Data Science 1 with R (STAT 301-1)
+author: "Hannah Ma"
+date: today
+number-sections: true
 format: 
   html:
    toc: true
@@ -17,35 +23,68 @@ execute:
 <https://github.com/stat301-1-2023-fall/final-project-1-Hanyuyuu>
 :::
 
-
 ```{r}
-
+#| label: load-packages
 library(tidyverse)
+library(patchwork)
 traffic <- read_rds("data/traffic_data.rds")
-#traffic |> naniar::miss_var_summary()
-
-# traffic |> 
-#   select(num_units, 
-#          lane_cnt, 
-#          posted_speed_limit, 
-#          delay, 
-#          crash_day_of_week, 
-#          -longitude, 
-#          -latitude, 
-#          contains("injuries")) |> 
-#   drop_na() |>
-#   cor() |> 
-#   round(digits = 3) |> 
-#   knitr::kable()
-
-
 
 ```
 
+## Introduction
+
+My EDA explores over 700,000 traffic crashes in a high-quality dataset from the City of Chicago. My motivation was driven by the culture shock I experienced coming from a smaller town, regarding the much more aggressive driving in Chicago. Taken aback by the difference in behavior, when I found this dataset I thought it would be a good opportunity to better understand the landscape of traffic crashes in Chicago. Initially my research question was **"What are the primary predictors of traffic crashes in Chicago"**, but that has since evolved into several smaller questions which hopefully bring about a more holistic understanding of the traffic crashes in Chicago.
+
+Once again, this dataset works primarily from a large CSV file from the City of Chicago.[^1] Visualizations using map data are taken from the `tigris` and `mapview` R packages, with more information provided in the section @sec-where "Where are traffic accidents Occurring?"
+
+## Data overview & quality
+
+This data contains 49 columns and 775,311 observations, with each observation representing a traffic crash. 32 variables are categorical, and 17 are numeric. The quality of data is very high, likely because there are well-established procedures around reporting traffic incidents. 22 of the 49 variables are complete with no missing values. About half of variables with missing values are missing no more 1-3% of observations, but the other half (10 variables total) are missing upwards of 50% of their variables. Many of these encoded logical-type data, which were mostly excluded from analysis as they did not hold particularly detailed information. Otherwise, missingness was not a significant barrier in my analyses. Even if some rows were ignored, I believe there was enough remaining data to provide substantial work for an exploratory data analysis.
+
 ```{r}
+#| label: data-missingness
+traffic |> 
+  naniar::miss_var_summary() |> 
+  filter(pct_miss > 3) |> 
+  knitr::kable(caption = "Table of variables with >50% data missing",
+               col.names = c("Variable", "Number of Missing Observations", "Percent Missing"),
+               align = "c")
+```
+
+Variables ending with "\_i" contained logical-type data, which did not provide high-resolution data, and eventually was not used extensively in the data exploration as a result. lane_cnt refers to the number of lanes in the roadway of the crash, and work_zone_type contained only two levels besides "UNKNOWN", so both variables were also excluded from analysis.
+
+## Explorations
+
+### At First Glance
+
+The words "traffic crash" of conjure gruesome images of upturned cars, flashing police lights, twisted metal, and broken vehicle parts littering the street. The representative image of a "traffic accident" is likely for many readers to be reminiscent of the shocking images seen in driver's school used to scare new drivers into taking extra precaution on the road. Fortunately, this dataset reminds us that the vast majority of traffic accidents do not look like this. Univariate analysis of variables most relevant and/or salient to a traffic accident are presented below. First, notice that the overwhelming majority of traffic accidents do not lead to injury.
+
+::: {#fig-environments layout-nrow=2}
+
+![a) Weather](plots/final/at_a_glance_weather_polished.png)
+
+![b) Lighting](plots/final/at_a_glance_lighting_polished.png)
+
+![c) Device](plots/final/at_a_glance_device_polished.png)
+
+![d) Road Surface](plots/final/at_a_glance_road_polished.png)
+
+Figures 1a-d: A series of 4 images depicting the distributions of environmental conditions of chicago crashes.
+:::
+
+
+
+
+The overwhelming majority of crashes occur in clear weather, during daylight, and on dry roads, indicating that inclement weather and darkness are not disproportionate heavy predictors of traffic crashes. Most crashes do occur when there are no traffic lights or other devices nearby to modulate traffic, but crashes occurring near perfectly functional devices make up the second-largest category on this list. Crashes occurring near broken or otherwise non-functional traffic control devices only make up a small proportion of the data, which offers a positive outlook for the vast majority of crashes.
+
+Following, I examined the recorded primary and secondary causes for crashes, presented in tables below.
+
+```{r}
+#| label: contributing-cause-tables
 #| layout-ncol: 2
-#| tbl-cap: "Tables of Primary and Secondary Contributory Causes in Chicago Traffic Crashes"
+#| tbl-cap: Tables of Primary and Secondary Contributory Causes in Chicago Traffic Crashes
 #| tbl-subcap: ["Primary", "Secondary"]
+
 traffic |> 
   count(prim_contributory_cause) |> 
   arrange(desc(n)) |> 
@@ -54,39 +93,38 @@ traffic |>
 traffic |> 
   count(sec_contributory_cause) |> 
   arrange(desc(n)) |> 
-  knitr::kable()
+  knitr::kable(col.names = c("Secondary Cause", "Count"))
 ```
 
-### Introduction
-Overview of the EDA. What was the motivation for this analysis? What initial curiosities or research questions motivated you? Describe the data source(s) you will use to build a predictive model. If you are obtaining information from websites you should cite those in your References.
+Failing to yield right-of-way, following-too closely, improper overtaking/passing, failing to reduce speed to avoid crash, and improper backing make up the five largest non-unknown primary reasons behind a traffic crash, and make up four out of five largest non-unknown secondary reasons for a traffic crash. It is important at this point to acknowledge that "Unable to determine" and "Not applicable" are listed as either the primary and secondary cause amongst the vast majority of crashes that the data is unable to fully capture the often-complex events leading up to a crash.
 
-### Data overview & quality
-A concise high level overview of the dataset(s) being explored.
-size, number of observations, number, of variables, variable types, and discussion of any quality issues 
-(especially missingness and how it may impact the analysis). 
+As an aside, it is encouraging to note that crashes caused by technology-related distractions do not make up a large proportion of the crashes in this dataset. Out of the 40 different types of contributory causes, cell phone use other than texting ranks 28th as a primary cause, and texting ranks 35th.
 
-Highlight any important data collection issues or concerns. 
+Figure 2a-c depict the distribution of crashes at different times in the day, hours in a week, and months of the year, which reveals that crashes peak in the early afternoon at 3pm, on Fridays, and during the month of October.
 
-If over-technical, but important, then place technical details in Appendix: technical info.
+::: {#fig-time layout-ncol="3"}
+![a) Hourly Distribution](plots/final/at_a_glance_crash_hour_polished.png){width="250"}
 
-## Explorations
+![b) Weekly Distribution](plots/final/at_a_glance_crash_day_polished.png){width="250"}
 
-### At First Glance
-The words "traffic crash" of conjure gruesome images of upturned cars, flashing police lights, twisted metal, and broken vehicle parts littering the street. The representative image of a "traffic accident" is likely for many readers to be reminiscent of the shocking images seen in driver's school used to scare new drivers into taking extra precaution on the road. Fortunately, this dataset reminds us that the vast majority of traffic accidents do not look like this. Univariate analysis of variables most relevant and/or salient to a traffic accident are presented below. First, notice that the overwhelming majority of traffic accidents do not lead to injury.
+![c) Monthly Distribution](plots/final/at_a_glance_crash_month_polished.png){width="250"}
 
-injury dist
+Crash distributions at hour, week, and month levels.
+:::
 
-devide, road, light, weather conditions
+These plots echo an important distinction that must be made when proceeding with analysis, which is the question of whether crashes occur more frequently at a certain time or under a certain condition because of that particular time/condition or because there are simply more cars around at that time. For example, the fact that crashes occur most frequently between 3-5pm is likely because there are more cars on roads during the afternoon rush hour, not that there is something inherently dangerous about this time. 
 
-types
+Finally, Figure 3 depicts the distribution of most severe injuries at each crash, which allows us to conclude that, fortunately, the overwhelming majority of crashes do not result in incapacitating or fatal injuries. 
 
-primary secondary causes
+Unfortunately for the data analyst, the tameness of these results are somewhat dissatisfying, Thus, the remainder of the report will explore deeper connections between the various causes of crashes, environmental conditions, and injury severity found within the dataset. 
 
-crash day week hour
-
-. Thus, the remainder of the report will explore the crashes at three different severities: those which produce no injury, those which produce incapacitating injury, and those which are fatal
+## Looking Deeper
 
 ### What environment produces different kinds of crashes?
+
+Figure 5 below is a tile plot depicting the frequency (count) of crashes occuring at intersections of certain weather conditions and severities
+
+If a particular type of weather frequently led to more severe injuries, one would expect the tile at the intersection of the two variables to consistently be brighter. However, the plot shows that the brightest row, attributed to the weather condition recorded most often, remains consistently bright across all injury types for the most commonly reported weather conditions. Only when the five most common weather conditions (clear, rain, overcast, snow, and unknown) are removed are there subtle differences in fatality based upon weather. From the figure below, it appears that blowing snow, fog/smoke/haze, and severe wind disproportionately produce fatal crashes.
 
 ### When are crashes occurring?
 
@@ -94,31 +132,22 @@ crash day week hour
 
 ### How are crashes occurring?
 
-### Where are crashes occurring?
 ### Aside: When are Crashes Being Reported?
 
+### Where are crashes occurring? {#sec-where}
 
-
-
-
-
+The final component of this EDA report is an interactive map of crashes from 2023, created with the help of the `mapview` library and with instructions from the Duke University Center for Data & Visualization.[^2]
 
 It should be clear how things build of of each other and why we are looking at what is being presented. Should also be letting the reader know whether what is shown is as expected or is it surprising (maybe some of each).
-
-You could imagine structuring this section around analysis type: univariate, bivariate, and multivariate. Can be a little harder to build a narrative with this structure. Could build sections that are dedicated to important variables: variable 1, variable 2, etc. In this case the sections would thoroughly explore the section’s variable through univariate, bivariate, and multivariate analyses. Alternatively, could build your sections around broad curiosities/research questions. Some of which probably inspired the project, and others that were developed through conducting the EDA.
-
 
 ## Conclusion
 
 State conclusions or insights. Were you surprised by things you found or were they as expected? Why? This is a great place for future work, new research questions, and next steps.
 
+## References
 
-## References — if needed
-Any references used should be sited here. This includes but is not limited to where you got your data. There is no “formal” reference guideline but we recommend APA format. Example: Lastname, F. M. (Year, Month Date). Title of page. Site name. URL
+There is no "formal" reference guideline but we recommend APA format. Example: Lastname, F. M. (Year, Month Date). Title of page. Site name. URL
 
-## Appendix: technical info — if needed
-A place to share complex and important technical steps that may highly impact explorations, but the details are too technical to share in main body of the report.
+[^1]: City of Chicago (2023, November 29). Traffic Crashes - Crashes. Chicago data Portal. https://data.cityofchicago.org/Transportation/Traffic-Crashes-Crashes/85ca-t3if.
 
-## Appendix: extra explorations — if needed
-
-Useful in cases where there are an over-abundance of explorations and they are not useful in the main body of the report or they are uninteresting, but still think readers should have access to them for reference.
+[^2]: Duke University Center for Data & Visualization. Latitude and Longitude Coordinates. Mapping in R. https://map-rfun.library.duke.edu/01_georeference.
