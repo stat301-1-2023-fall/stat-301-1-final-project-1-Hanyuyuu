@@ -36,5 +36,35 @@ mapview(traffic_map)
 write_rds(chi_map, "data/chi_map.rds")
 write_rds(traffic_map, "data/traffic_map.rds")
 
+### Codebooks
+traffic_map_codebook <- tibble(variable = "geometry",
+                               description = "A geometric object encoding the site of a crash.")
+chi_map_codebook <- tibble(variable = c("STATEFP10",
+                                        "ZCTA5CE10",
+                                        "GEOID10",
+                                        "CLASSFP10",
+                                        "MTFCC10",
+                                        "FUNCSTAT10",
+                                        "ALAND10",
+                                        "AWATER10",
+                                        "INTPLTLAT10",
+                                        "INTPTLON10",
+                                        "PARTFLG10",
+                                        "GEOMETRY"),
+                           description = c("State FIPS (Federal Information Processing Standards) code.",
+                                           "ZIP Code Tabulation Area (ZCTA) code.",
+                                           "Unique identifier for a geographic entity.",
+                                           "Classification code for the type of geographic entity.",
+                                           "MAF/TIGER Feature Class Code, used in the U.S. Census Bureau's MAF/TIGER database.",
+                                           "Functional status of the geographic entity (e.g., 'S' for statistical).",
+                                           "Land area.",
+                                           "Water area.",
+                                           "Latitude of the internal point.",
+                                           "Longitude of the internal point.",
+                                           "Participation flag indicating whether the geographic entity is part of another entity.",
+                                           "Attribute related to the spatial representation of the geographic entity.")
+                           )
+write_rds(chi_map_codebook, "data/chi_map_codebook.rds")
+write_rds(traffic_map_codebook, "data/traffic_map_codebook.rds")
 #Reference for creating interactive map
 #https://map-rfun.library.duke.edu/01_georeference

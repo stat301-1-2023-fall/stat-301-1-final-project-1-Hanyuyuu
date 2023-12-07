@@ -14,4 +14,4 @@ chi_map.rds contains map data of selected zipcodes in the City of Chicago from t
 
 traffic_map.rds contains location data for all traffic crashes in the traffic_data.rds with longitude and latitude data, encoded as a geometric object used for plotting on a map.
 
-
+traffic_data_codebook and chi_map codebook adapted respectively from codebook given by the City of Chicago for the raw traffic_data (sourced from link at top) and shapefile documentation provided by census.gov (https://www2.census.gov/geo/pdfs/maps-data/data/tiger/tgrshp2019/TGRSHP2019_TechDoc.pdf, page 30 of pdf)
