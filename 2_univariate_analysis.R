@@ -1,6 +1,11 @@
 ### 2 - Univariate Analysis #####
+# This step utilizes a series of for loops to generate univariate distribution plots for all 
+# variables in the dataset\
+
 library(tidyverse)
 traffic <- read_rds("data/traffic_data.rds")
+
+# list of variables, organized by type, from 1_data_cleaning.R
 convert_to_factor <- c("traffic_control_device", "device_condition", "weather_condition", 
                        "lighting_condition", "first_crash_type", "trafficway_type",
                        "alignment", "roadway_surface_cond", "road_defect", "report_type",
@@ -61,7 +66,7 @@ for (interval in levels(traffic$delay_bins)){
          path = "./plots/datetime")
 }
 
-### Distribution of delay between time of crash and time of report to police 
+### Distribution of all delay between time of crash and time of report to police 
 
 all_delay <- ggplot(traffic, aes(delay)) +
   geom_histogram(bins = 250) +
@@ -69,6 +74,19 @@ all_delay <- ggplot(traffic, aes(delay)) +
 ggsave("delay_distribution.png",
        all_delay,
        path = "./plots/datetime")
+
+### Distribution of delay grouped by day, week, month
+traffic |> 
+  filter(delay_bins == "day") |> 
+  ggplot(aes(delay)) +
+  geom_histogram() +
+  labs(title = "Day")
+
+traffic |> 
+  filter(delay_bins == "week") |> 
+  ggplot(aes(delay)) +
+  geom_histogram() +
+  labs(title = "Week")
 
 ### Distribution of injuries all together
 injury_dist <- injuries |> 

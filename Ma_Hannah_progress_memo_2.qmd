@@ -49,18 +49,6 @@ Seeing that the primary and secondary contributory causes recorded in this datas
 ![](plots/factor/lighting_condition_distribution.png) ![](plots/factor/road_defect_distribution.png)
 ![](plots/factor/most_severe_injury_distribution.png)
 
-```{r}
-#| label: cor-matrix
-#| echo: false
-
-traffic |> 
-  filter(most_severe_injury == "FATAL") |> 
-  select(where(is.numeric), -lane_cnt, -(injuries_total:injuries_unknown), -beat_of_occurrence) |> 
-  cor() |> 
-  round(digits = 3) |> 
-  knitr::kable()
-```
-
 Such plots reveal that most crashes, fortunately, do not appear to be due to extreme weather or road conditions, and most are not incredibly serious.
 
 Thus, I would like to change the direction of my EDA from this point onwards into investigating the **primary predictors of particular intensities of crashes**, based on the `most_severe_injury` plot above, **and particular types of crashes**, based upon the `prim_contributory_cause` plot. For example, what conditions correlate with crashes due to a failure to reduce vehicle speed? How intense, typically are these kinds of crashes? Viewing the dataset with a more specific lense may help me develop more concrete findings. One particular direction I can envision myself taking this project is looking solely at "failure to yield right-of-way" crashes. Such crashes might be due to an inability to see an oncoming car or pedestrian, and as I will be integrating map data into this project, I may be able to find certain areas where these types of crashes are concentrated, which could elucidate design faults in the roads at these areas.

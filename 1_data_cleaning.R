@@ -43,7 +43,7 @@ for(var in convert_to_datetime){
     mutate({{var}} := parse_date_time(!!sym(var), orders = "%m/%d/%Y %I:%M:%S %p"))
 }
 
-### Create delay variable
+### Create delay and delay_bins variable
 traffic <- traffic |> 
   mutate(delay = (date_police_notified - crash_date)/ddays(1),
          delay_bins = cut(delay, 
@@ -60,8 +60,18 @@ injuries <-
                names_to = "injury_type",
                names_pattern = "injuries_(.*)",
                values_to = "value")
-write_rds(injuries, "data/injuries.rds")
 
 ### Store cleaned data
 write_rds(traffic, "data/traffic_data.rds")
-traffic <- read_rds("data/traffic_data.rds")
+write_rds(injuries, "data/injuries.rds")
+
+### Write codebooks
+injuries_codebook <- tibble(variable = c(),
+                            description = c())
+traffic_codebook <- tibble(variable = c(),
+                            description = c())
+
+write_rds(traffic_data_codebook, "data/traffic_data.rds")
+write_rds(injuries, "data/injuries_codebook.rds")
+
+  

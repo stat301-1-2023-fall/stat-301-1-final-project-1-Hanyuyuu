@@ -37,6 +37,8 @@ My EDA explores over 700,000 traffic crashes in a high-quality dataset from the 
 
 Once again, this dataset works primarily from a large CSV file from the City of Chicago.[^1] Visualizations using map data are taken from the `tigris` and `mapview` R packages, with more information provided in the section @sec-where "Where are traffic accidents Occurring?"
 
+[^1]: City of Chicago (2023, November 29). Traffic Crashes - Crashes. Chicago data Portal. https://data.cityofchicago.org/Transportation/Traffic-Crashes-Crashes/85ca-t3if.
+
 ## Data overview & quality
 
 This data contains 49 columns and 775,311 observations, with each observation representing a traffic crash. 32 variables are categorical, and 17 are numeric. The quality of data is very high, likely because there are well-established procedures around reporting traffic incidents. 22 of the 49 variables are complete with no missing values. About half of variables with missing values are missing no more 1-3% of observations, but the other half (10 variables total) are missing upwards of 50% of their variables. Many of these encoded logical-type data, which were mostly excluded from analysis as they did not hold particularly detailed information. Otherwise, missingness was not a significant barrier in my analyses. Even if some rows were ignored, I believe there was enough remaining data to provide substantial work for an exploratory data analysis.
@@ -59,8 +61,7 @@ Variables ending with "\_i" contained logical-type data, which did not provide h
 
 The words "traffic crash" of conjure gruesome images of upturned cars, flashing police lights, twisted metal, and broken vehicle parts littering the street. The representative image of a "traffic accident" is likely for many readers to be reminiscent of the shocking images seen in driver's school used to scare new drivers into taking extra precaution on the road. Fortunately, this dataset reminds us that the vast majority of traffic accidents do not look like this. Univariate analysis of variables most relevant and/or salient to a traffic accident are presented below. First, notice that the overwhelming majority of traffic accidents do not lead to injury.
 
-::: {#fig-environments layout-nrow=2}
-
+::: {#fig-environments layout-nrow="2"}
 ![a) Weather](plots/final/at_a_glance_weather_polished.png)
 
 ![b) Lighting](plots/final/at_a_glance_lighting_polished.png)
@@ -69,7 +70,7 @@ The words "traffic crash" of conjure gruesome images of upturned cars, flashing 
 
 ![d) Road Surface](plots/final/at_a_glance_road_polished.png)
 
-Figures 1a-d: A series of 4 images depicting the distributions of environmental conditions of chicago crashes.
+A series of 4 images depicting the distributions of environmental conditions of chicago crashes.
 :::
 
 The overwhelming majority of crashes occur in clear weather, during daylight, and on dry roads, indicating that inclement weather and darkness are not disproportionate heavy predictors of traffic crashes. Most crashes do occur when there are no traffic lights or other devices nearby to modulate traffic, but crashes occurring near perfectly functional devices make up the second-largest category on this list. Crashes occurring near broken or otherwise non-functional traffic control devices only make up a small proportion of the data, which offers a positive outlook for the vast majority of crashes.
@@ -99,56 +100,84 @@ As an aside, it is encouraging to note that crashes caused by technology-related
 
 Figure 2a-c depict the distribution of crashes at different times in the day, hours in a week, and months of the year, which reveals that crashes peak in the early afternoon at 3pm, on Fridays, and during the month of October.
 
-::: {#fig-time layout-ncol=3}
-![a) Hourly Distribution](plots/final/at_a_glance_crash_hour_polished.png){width="250"}{#fig-hourly}
+::: {#fig-time layout-ncol="3"}
+![Hourly Distribution](plots/final/at_a_glance_crash_hour_polished.png){#fig-hourly}
 
-![b) Weekly Distribution](plots/final/at_a_glance_crash_day_polished.png){width="250"}{#fig-weekly}
+![Weekly Distribution](plots/final/at_a_glance_crash_day_polished.png){#fig-weekly}
 
-![c) Monthly Distribution](plots/final/at_a_glance_crash_month_polished.png){width="250"}{#fig-monthly}
+![Monthly Distribution](plots/final/at_a_glance_crash_month_polished.png){#fig-monthly}
 
 Crash distributions at hour, week, and month levels.
 :::
 
-These plots echo an important distinction that must be made when proceeding with analysis, which is the question of whether crashes occur more frequently at a certain time or under a certain condition because of that particular time/condition or because there are simply more cars around at that time. For example, the fact that crashes occur most frequently between 3-5pm is likely because there are more cars on roads during the afternoon rush hour, not that there is something inherently dangerous about this time. 
+These plots echo an important distinction that must be made when proceeding with analysis, which is the question of whether crashes occur more frequently at a certain time or under a certain condition because of that particular time/condition or because there are simply more cars around at that time. For example, the fact that crashes occur most frequently between 3-5pm is likely because there are more cars on roads during the afternoon rush hour, not that there is something inherently dangerous about this time.
 
-Finally, Figure 3 below depicts the distribution of most severe injuries at each crash, which allows us to conclude that, fortunately, the overwhelming majority of crashes do not result in incapacitating or fatal injuries. 
+Finally, Figure 3 below depicts the distribution of most severe injuries at each crash, which allows us to conclude that, fortunately, the overwhelming majority of crashes do not result in incapacitating or fatal injuries.
 
 ![Figure 3: Distribution of Most Severe Injury](plots/final/at_a_glance_most_severe_injury_distribution.png){width="250"}
 
-Unfortunately for the data analyst, the tameness of these results are somewhat dissatisfying, Thus, the remainder of the report will explore deeper connections between the various causes of crashes, environmental conditions, and injury severity found within the dataset. 
+Unfortunately for the data analyst, the tameness of these results are somewhat dissatisfying, Thus, the remainder of the report will explore deeper connections between the various causes of crashes, environmental conditions, and injury severity found within the dataset.
 
 ## Looking Deeper
 
-###  What causes of crashes produce the greatest number of injuries?
+### What causes of crashes produce the greatest number of injuries?
+
 If most crashes do not result in injury, then for those which do cause injury, what are the primary contributing reason for these crashes? Injury severity can be categorized in severity of the worst injury but also in how many injuries are caused in the accident. I have chosen the latter here for a different perspective. Due to the number of levels in the primary contributory cause variable, I have grouped similar causes together for improved readability in visualization. The complete groupings can be found in the `5_final_figures_tables.R` script in the Github repository. From Figure 4, it is evident that driver-dependent causes such as improper driving, disregarding signs, and driver condition (including physical condition and aggressive behavioral) are the primary drivers of the number of injuries in a car crash. Environmental conditions such as weather, external vision obstructions, and other presences outside of the care account for relatively fewer injury-causing crashes.
 
-![Figure 4: Cause vs. Injury Frequency](plots/final/looking_deeper_cause_v_injury_final.png){width="250"}
+![Cause vs. Injury Frequency](plots/final/looking_deeper_cause_v_injury_final.png){#fig-cause-v-injury width="250"}
 
 ### How do crash severity and type correlate?
+
 Taking yet another perspective for quantifying the types and injury severity of crashes, Figure 5 below is a tile plot depicting the frequency (count) of crashes occurring at the intersection of type (a variable primarily describing the location and object of the crash) and most severe injury. Understandably, it illustrats that crashes involving parked vehicles most often result in non-incapacitating injuries, whereas those involving pedestrians result in much more severe injuries.
 
-![Figure 4: Cause vs. Injury Frequency](plots/final/looking_deeper_crash_type_v_most_severe_injury_final.png)
+![Type vs. Most Severe Injury Frequency](plots/final/looking_deeper_crash_type_v_most_severe_injury_final.png){#fig-type-v-injury}
 
 ### Does the occurrence of weather as a contributory cause fluctuate by season?
 
-I was initially surprised in @fig-monthly that there were fewer crashes (see the complete list of contributory causes in @tbl-contributory-causes)
+I was initially surprised in @fig-monthly that there were fewer crashes during the winter months, where ice and inclement weather would make proper driving difficult. However this may be due to a reduced number of cars on roads during the winter month, which would obscure changes in the rate of occurrence for each cause listed in the dataset. Figure 5 resolves these with a stacked bar chart. I have isolated weather-related contributory causes from the list of primary contributory causes, and indeed there is an increase in the number of weather-related crashes during November, December, January, and February despite the fewer number of incidents overall.
 
+![Bar chart revealing more weather-related crashes during winter months](plots/final/looking_deeper_winter_crashes_final.png){#fig-winter}
 
+### Do certain weather conditions result in more severe injuries than others?
 
-If a particular type of weather frequently led to more severe injuries, one would expect the tile at the intersection of the two variables to consistently be brighter. However, the plot shows that the brightest row, attributed to the weather condition recorded most often, remains consistently bright across all injury types for the most commonly reported weather conditions. Only when the five most common weather conditions (clear, rain, overcast, snow, and unknown) are removed are there subtle differences in fatality based upon weather. From the figure below, it appears that blowing snow, fog/smoke/haze, and severe wind disproportionately produce fatal crashes.
+Relatedly, it may be worthwhile to examine this kind of trend in all weather conditions. Figure 6 depicts a tile plot of the number of crashes occurring under different combinations of weather and injury severity. If a particular type of weather frequently led to more severe injuries, one would expect the tile at the intersection of the two variables to consistently be brighter. In the leftmost tile plot, all weather conditions represented in the dataset are kept on the plot, which shows that the brightest row, attributed to the weather condition recorded most often, remains consistently bright across all injury types for the most commonly reported injury conditions. This unfortunately obscures subtle differences in the remaining weather condition rows, and is likely due to the disproportionate number of crashes recorded on days with these weather patterns. But, when the five most common weather conditions (clear, rain, overcast, snow, and unknown) are removed on can see subtle differences in fatality based upon weather. From the figure below, it appears that blowing snow, fog/smoke/haze, and severe wind disproportionately produce fatal crashes.
 
-### When are crashes occurring?
+::: {#fig-weather-severity layout-ncol="2"}
 
-### Why are crashes occurring?
+![All weather conditions](plots/final/looking_deeper_weather_all_final.png)
 
-### How are crashes occurring?
+![Without top 5 weather conditions](plots/final/looking_deeper_weather_other_final.png)
+
+Tile plots depicting crashes of different severity under different weather conditions.
+:::
+
+### Are there differences between daytime and nighttime crashes?
+
+I also initially anticipated more crashes at night due to lower visibility, and the potential of bright lights making driving more difficult, and repeated the analysis conducted in @fig-winter to investigate primary contributory causes which occur more often at night. This figure uses a proportionally filled bar chart to visualize changes in the rate of occurrence for nighttime-relevant primary contributory causes for crashes recorded at each hour of the day. The primary causes are grouped again using the groupings seen in @fig-cause-v-injury for improved readability, and illustrates that substance abuse-related crashes, rather than impaired visibility, occur disproportionately at night. Curiously enough, obscured vision crashes actually increase between 6-10am each day. 
+
+![Proportional bar chart of nighttime-relevant crash cause fluctuations throughout the day.](plots/final/looking_deeper_night_final.png){#fig-night}
 
 ### Aside: When are Crashes Being Reported?
 
+Although not terribly relevant to understanding the main predictors of crashes in Chicago, this dataset contained information on when crashes occurred and when crashes were reported to the police, which allows for investigating any trends in the delay between these two events. Below are histograms depicting the distribution of delay for crashes reported within the day and within the week, as well as the distribution of all recorded delays, where readers can see a curious pattern emerge. 
+
+::: {#fig-delay layout-ncol=3}
+![Within a Day](plots/final/aside_delay_by_day.png){#fig-dy}
+
+![Within a Week](plots/final/aside_delay_by_wk.png){#fig-wk}
+
+![All delay](plots/final/aside_delay_all.png){#fig-all}
+
+Distributions of reporting delay within the day, week, and all delays.
+:::
+
+All histograms are skewed right, understandably because those involved in the crashes would likely want to report and document their crash as soon as possible, but especially in the delay reported within the week we observe curious peaks in delay at "whole number" units of delay. A similar pattern can be found in @fig-all, which contains peaks at delays reported at 1, 2, and 4 years post-crash (365, 730, and 1460 days, respectively) before the number of crashes reported becomes too small to notice a difference in cases of longer report delays.
 
 ### Where are crashes occurring? {#sec-where}
 
 The final component of this EDA report is an interactive map of crashes from 2023, created with the help of the `mapview` library and with instructions from the Duke University Center for Data & Visualization.[^2]
+
+[^2]: Duke University Center for Data & Visualization. Latitude and Longitude Coordinates. Mapping in R. https://map-rfun.library.duke.edu/01_georeference.
 
 It should be clear how things build of of each other and why we are looking at what is being presented. Should also be letting the reader know whether what is shown is as expected or is it surprising (maybe some of each).
 
@@ -159,7 +188,3 @@ State conclusions or insights. Were you surprised by things you found or were th
 ## References
 
 There is no "formal" reference guideline but we recommend APA format. Example: Lastname, F. M. (Year, Month Date). Title of page. Site name. URL
-
-[^1]: City of Chicago (2023, November 29). Traffic Crashes - Crashes. Chicago data Portal. https://data.cityofchicago.org/Transportation/Traffic-Crashes-Crashes/85ca-t3if.
-
-[^2]: Duke University Center for Data & Visualization. Latitude and Longitude Coordinates. Mapping in R. https://map-rfun.library.duke.edu/01_georeference.

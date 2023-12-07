@@ -239,7 +239,7 @@ ggsave("looking_deeper_cause_v_injury_final.png",
        width = 6)
 
 
-# How do crash severity and type correlate?
+### Looking deeper - How do crash severity and type correlate?
 crash_type_v_most_severe_injury <- traffic %>% 
   filter(most_severe_injury %in% c("NO INDICATION OF INJURY", 
                                    "INCAPACITATING INJURY", 
@@ -280,7 +280,7 @@ ggsave("looking_deeper_crash_type_v_most_severe_injury_final.png",
        width = 6, 
        height = 4)
 
-# There are fewer crashes are during the winter, but are there more due to road conditions?
+### Looking deeper - Winter crash conditions
 winter_crashes <- traffic |> 
   mutate(prim_contributory_cause = fct_collapse(prim_contributory_cause,
                                                 "other" = c("ANIMAL",
@@ -334,9 +334,37 @@ ggsave("looking_deeper_winter_crashes_final.png",
        width = 10,
        height = 4)
 
+### Looking deeper - Is there a difference in injury severity that is dependent upon weather? 
 
-# Are there differences in cause between daytime and nighttime crashes?
-traffic |> 
+weather_severity_all <- traffic |> 
+  filter(!(is.na(most_severe_injury))) |> 
+  count(most_severe_injury, weather_condition) |> 
+  mutate(prop = n / sum(n), .by = most_severe_injury) |> 
+  ggplot(aes(most_severe_injury, weather_condition)) +
+  geom_tile(mapping = aes(fill = prop)) 
+
+ggsave("looking_deeper_weather_all_final.png",
+       weather_severity_all,
+       path = "plots/final")
+
+weather_severity_other <- traffic |> 
+  filter(!(is.na(most_severe_injury)),
+         weather_condition != "CLEAR",
+         weather_condition != "RAIN",
+         weather_condition != "UNKNOWN",
+         weather_condition != "SNOW",
+         weather_condition != "CLOUDY/OVERCAST") |> 
+  count(most_severe_injury, weather_condition) |> 
+  mutate(prop = n / sum(n), .by = most_severe_injury) |> 
+  ggplot(aes(most_severe_injury, weather_condition)) +
+  geom_tile(mapping = aes(fill = prop)) 
+
+ggsave("looking_deeper_weather_other_final.png",
+       weather_severity_other,
+       path = "plots/final")
+
+### Looking deeper - Are there differences in cause between daytime and nighttime crashes?
+night <- traffic |> 
   mutate(prim_contributory_cause =  
            fct_collapse(prim_contributory_cause, 
                         "Distraction" = c("DISTRACTION - FROM INSIDE VEHICLE",                                               
@@ -379,35 +407,73 @@ traffic |>
                         "Vehicle Condition" = "EQUIPMENT - VEHICLE CONDITION")
          
   ) |> 
-  filter(prim_contributory_cause %in% c("Disregarding signs and markings",
+  filter(prim_contributory_cause %in% c("Distraction",
                                         "Improper Driving",
-                                        "Vehicle Condition",
                                         "Influence of Substances",
                                         "Driver Condition",
                                         "Construction-related",
-                                        "Vision Obscured")) |> 
+                                        "Weather",
+                                        "Vision Obscured")) |>
   ggplot(aes(crash_hour)) +
   geom_bar(aes(fill = prim_contributory_cause), 
-           position = "fill")
+           position = "fill") +
+  labs(x = "Crash Hour",
+       y = "Count",
+       fill = "Primary\nContributory\nCause")
 
-# Is there a difference in injury severity that is dependent upon weather? 
+ggsave("looking_deeper_night_final.png",
+       night,
+       path = "plots/final")
 
-traffic |> 
-  filter(!(is.na(most_severe_injury)),
-         weather_condition != "CLEAR",
-         weather_condition != "RAIN",
-         weather_condition != "UNKNOWN",
-         weather_condition != "SNOW",
-         weather_condition != "CLOUDY/OVERCAST") |> 
-  count(most_severe_injury, weather_condition) |> 
-  mutate(prop = n / sum(n), .by = most_severe_injury) |> 
-  ggplot(aes(most_severe_injury, weather_condition)) +
-  geom_tile(mapping = aes(fill = prop)) 
 
 # How do crashes at different speeds involving different numbers of units differ in injury severity? 
-test <- traffic |> slice_head(n = 100)
-ggplot(traffic, aes(posted_speed_limit, num_units)) +
-  geom_point(position = position_jitter(width = 3, height = 0.5)) +
-  facet_wrap(~most_severe_injury)
 
+units_v_speed <- ggplot(traffic |> filter(!is.na(most_severe_injury)), 
+                        aes(posted_speed_limit, num_units)) +
+  geom_point(position = position_jitter(width = 3, height = 0.5)) +
+  facet_wrap(~most_severe_injury) +
+  labs(x = "Posted Speed Limit",
+       y = "Number of Units Involved")
+
+ggsave("looking_deeper_speed_v_units_final.png",
+       units_v_speed,
+       path = "plots/final")
+
+### Aside 
+dy <- traffic |> 
+  filter(delay_bins == "day") |> 
+  ggplot(aes(delay)) +
+  geom_histogram() +
+  labs(x = "Delay within 1 day",
+       y = "Count")
+
+ggsave("aside_delay_by_day.png",
+       dy,
+       path = "plots/final")
+
+wk <- traffic |> 
+  filter(delay_bins == "week") |> 
+  ggplot(aes(delay)) +
+  geom_histogram() +
+  scale_x_continuous(breaks = c(1, 2, 3, 4, 5, 6, 7)) +
+  labs(x = "Delay by number of days",
+       y = "Count")
+
+ggsave("aside_delay_by_wk.png",
+       wk,
+       path = "plots/final")
+
+ggsave("aside_delay_by_wk.png",
+       wk,
+       path = "plots/final")
+
+all <- ggplot(traffic, aes(delay)) +
+  geom_histogram(bins = 250) +
+  coord_cartesian(ylim = c(0, 25)) +
+  labs(x = "Duration of Delay (in days)",
+       y = "Count")
+
+ggsave("aside_delay_all.png",
+       all,
+       path = "plots/final")
 
