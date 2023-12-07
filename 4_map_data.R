@@ -32,33 +32,9 @@ ggplot() +
 
 mapview(traffic_map)
 
+### Store data
+write_rds(chi_map, "data/chi_map.rds")
+write_rds(traffic_map, "data/traffic_map.rds")
+
 #Reference for creating interactive map
 #https://map-rfun.library.duke.edu/01_georeference
-
-
-
-
-
-
-
-
-
-
-
-beats <- read_csv("data/raw/PoliceBeatDec2012.csv") |> janitor::clean_names() |> 
-  mutate(beat_num := as.double(beat_num))
-joined <- traffic |> 
-  select(crash_record_id, beat_of_occurrence) |> 
-  drop_na() |> 
-  left_join(y = beats, join_by(beat_of_occurrence == beat_num)) 
-ggplot(beats) +
-  geom_polygon()
-
-#ggplot(data = zipcodedf, aes(x = long, y = lat, group = group, fill = continuous_var)) +
-#  geom_polygon() +
-
-  joined |> 
-  group_by(beat_of_occurrence) |> 
-  mutate(count = n()) |> 
-  ggplot(aes(fill = count)) +
-  geom_sf()

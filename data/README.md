@@ -10,4 +10,8 @@ traffic_data.rds contains all the original columns with the appropriate types af
 
 injuries.rds is a subset of the original traffic_data.rds, which contained different measures of injuries recorded at each crash in separate columns. For ease of visualization, these variables were subsetted out of traffic_data.rds and pivoted to create a longer separate dataset.
 
+chi_map.rds contains map data of selected zipcodes in the City of Chicago from the tigris package. This is used in Section 4.8 of the Final Report.
+
+traffic_map.rds contains location data for all traffic crashes in the traffic_data.rds with longitude and latitude data, encoded as a geometric object used for plotting on a map.
+
 

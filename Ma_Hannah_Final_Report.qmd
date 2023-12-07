@@ -27,7 +27,12 @@ execute:
 #| label: load-packages
 library(tidyverse)
 library(patchwork)
+library(tigris)
+library(sf)
+library(mapview)
 traffic <- read_rds("data/traffic_data.rds")
+chi_map <- read_rds("data/chi_map.rds")
+traffic_map <- read_rds("data/traffic_map.rds")
 
 ```
 
@@ -35,9 +40,7 @@ traffic <- read_rds("data/traffic_data.rds")
 
 My EDA explores over 700,000 traffic crashes in a high-quality dataset from the City of Chicago. My motivation was driven by the culture shock I experienced coming from a smaller town, regarding the much more aggressive driving in Chicago. Taken aback by the difference in behavior, when I found this dataset I thought it would be a good opportunity to better understand the landscape of traffic crashes in Chicago. Initially my research question was **"What are the primary predictors of traffic crashes in Chicago"**, but that has since evolved into several smaller questions which hopefully bring about a more holistic understanding of the traffic crashes in Chicago.
 
-Once again, this dataset works primarily from a large CSV file from the City of Chicago.[^1] Visualizations using map data are taken from the `tigris` and `mapview` R packages, with more information provided in the section @sec-where "Where are traffic accidents Occurring?"
-
-[^1]: City of Chicago (2023, November 29). Traffic Crashes - Crashes. Chicago data Portal. https://data.cityofchicago.org/Transportation/Traffic-Crashes-Crashes/85ca-t3if.
+Once again, this dataset works primarily from a large CSV file from the City of Chicago.^1^ Visualizations using map data are taken from the `tigris` and `mapview` R packages, with more information provided in the section @sec-where "Where are traffic accidents Occurring?"
 
 ## Data overview & quality
 
@@ -57,7 +60,7 @@ Variables ending with "\_i" contained logical-type data, which did not provide h
 
 ## Explorations
 
-### At First Glance
+### At First Glance {#sec-afg}
 
 The words "traffic crash" of conjure gruesome images of upturned cars, flashing police lights, twisted metal, and broken vehicle parts littering the street. The representative image of a "traffic accident" is likely for many readers to be reminiscent of the shocking images seen in driver's school used to scare new drivers into taking extra precaution on the road. Fortunately, this dataset reminds us that the vast majority of traffic accidents do not look like this. Univariate analysis of variables most relevant and/or salient to a traffic accident are presented below. First, notice that the overwhelming majority of traffic accidents do not lead to injury.
 
@@ -157,6 +160,14 @@ I also initially anticipated more crashes at night due to lower visibility, and 
 
 ![Proportional bar chart of nighttime-relevant crash cause fluctuations throughout the day.](plots/final/looking_deeper_night_final.png){#fig-night}
 
+### How do crashes at different speeds involving different numbers of units differ in injury severity? 
+
+Figure 8 depicts a relationship between two of the few numeric variables in this dataset, plotting the number of units involved in the crash on the y-axis and posted speed limit at the site of the crash on the x. While it may have been more informative to visualize the speed of the crash to better understand fatality, the information presented here show that most crashes occur in regions where the speed limit is around 30mph. This I believe concurs with the findings found in @sec-afg, in that the majority of under very "typical" road conditions; in this case it indicates that crashes of all fatalities occur on local roads, which make up a larger proportion of the infrastructure found in Chicago. I am uncertain where the outlier values plotted at posted speed limits of ~100mph may have come from, as I have never seen a road with a posted speed limit that high. I would like to attribute these to a data collection error, although further investigation might be warranted.
+
+![Scatterplot of units in crash versus posted speed limit, faceted by most severe injury](plots/final/looking_deeper_speed_v_units_final.png){#fig-units-speed}
+
+
+
 ### Aside: When are Crashes Being Reported?
 
 Although not terribly relevant to understanding the main predictors of crashes in Chicago, this dataset contained information on when crashes occurred and when crashes were reported to the police, which allows for investigating any trends in the delay between these two events. Below are histograms depicting the distribution of delay for crashes reported within the day and within the week, as well as the distribution of all recorded delays, where readers can see a curious pattern emerge. 
@@ -175,16 +186,54 @@ All histograms are skewed right, understandably because those involved in the cr
 
 ### Where are crashes occurring? {#sec-where}
 
-The final component of this EDA report is an interactive map of crashes from 2023, created with the help of the `mapview` library and with instructions from the Duke University Center for Data & Visualization.[^2]
+The final component of this EDA report is an interactive map of crashes from 2023, created with the help of the `mapview` library and with instructions from the Duke University Center for Data & Visualization.^2^
 
-[^2]: Duke University Center for Data & Visualization. Latitude and Longitude Coordinates. Mapping in R. https://map-rfun.library.duke.edu/01_georeference.
+For ease of discussion, all traffic crashes have first been plotted on a static map of Chicago. The map shows an unusual cluster of crashes within the Oak Park and West Garfield Park regions of the city (to the west just under 41.9 degrees N), as well as the Chatham region (to the south in the middle between 41.7 and 41.8 degrees N) and a smaller cluster around downtown Chicago.
 
-It should be clear how things build of of each other and why we are looking at what is being presented. Should also be letting the reader know whether what is shown is as expected or is it surprising (maybe some of each).
+```{r}
+#| label: fig-static-map
+#| fig-cap: Traffic crashes reported to City of Chicago from 2015-present.
+
+ggplot() +
+  geom_sf(data = chi_map) +
+  geom_sf(data = traffic_map, col = "cornflowerblue", shape = 20) +
+  theme_minimal() +
+  labs(title = "All Reported Chicago Traffic Crashes from 2013 onwards")
+
+```
+For greater resolution, the table below contains the top 10 most-recorded street addresses, and the number of crashes recorded at each location. Curiously, these top street addresses do not concur with the clusters represented by the map above, which may be due to an issue of not all the recorded crashes containing longitude and latitude data. 
+
+```{r}
+#| label: tbl-top-10-addresses
+#| tbl-cap: Addresses of Top 10 Crash Locations
+
+traffic |> 
+  mutate(address = paste(street_no, street_direction, street_name, sep = " "),
+         .keep = "used") |> 
+  count(address) |> 
+  arrange(desc(n)) |> 
+  slice_head(n = 10) |> 
+  knitr::kable(align = "c",
+               col.names = c("Address", "Number of Crashes"))
+```
+
+An interactive map is also included below for the reader to explore at will.
+```{r}
+#| label: interactive-map
+mapview(traffic_map)
+```
+
 
 ## Conclusion
 
-State conclusions or insights. Were you surprised by things you found or were they as expected? Why? This is a great place for future work, new research questions, and next steps.
+To conclude, this data exploration shows that the vast majority of traffic incidents reported to the City of Chicago occur in very normal weather conditions and do not result insignificant injury. However, for those that do result in injury, most are due to the behavior of the driver rather than an external threat. The most fatal type of of crash are those which involve pedestrians. Weather becomes a more pressing issue during the winter, and there is a curious trend of people reporting crashes on whole-number units after the crash. There exist some regional areas with a high frequency of crashes, namely to the West, downtown, and South of Chicago. If given more time, I would have liked to investigate further on the reasons for these regional clusters of crashes as I outlined in my second progress memo. These findings could potentially uncover road design flaws which may contribute to the frequency of crashes at these locations. Furthermore, it would have been more satisfying to look into why the mapped crashes in @fig-static-map did not concur with the street addresses listed in @tbl-top-10-addresses, which may have required further data collection efforts. 
+
+The only finding I am particularly concerned about is the discovery that substance-related crashes occur more frequently at night. This could point to a need for potential policy improvements to reduce dangerous driving due to substance abuse in Chicago. 
+
+All in all, these findings do not suggest anything particularly out of the ordinary with the behavior of Chicago drivers. Even if some findings are somewhat unusual at first, they can each be explained reasonably. Perhaps the culture shock I experienced when I came to college was just part of moving to a larger city. 
 
 ## References
 
-There is no "formal" reference guideline but we recommend APA format. Example: Lastname, F. M. (Year, Month Date). Title of page. Site name. URL
+1. City of Chicago (2023, November 29). Traffic Crashes - Crashes. Chicago data Portal. https://data.cityofchicago.org/Transportation/Traffic-Crashes-Crashes/85ca-t3if.
+
+2. Duke University Center for Data & Visualization. Latitude and Longitude Coordinates. Mapping in R. https://map-rfun.library.duke.edu/01_georeference.

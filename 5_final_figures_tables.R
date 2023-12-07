@@ -477,3 +477,13 @@ ggsave("aside_delay_all.png",
        all,
        path = "plots/final")
 
+### Where do crashes occur?
+traffic |> 
+  mutate(address = paste(street_no, street_direction, street_name, sep = " "),
+         .keep = "used") |> 
+  count(address) |> 
+  arrange(desc(n)) |> 
+  slice_head(n = 10) |> 
+  knitr::kable(align = "c",
+               col.names = c("Address", "Number of Crashes"))
+
