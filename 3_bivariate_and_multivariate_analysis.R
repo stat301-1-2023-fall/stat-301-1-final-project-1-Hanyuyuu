@@ -215,6 +215,7 @@ traffic |>
            position = "fill")
 
 # Is there a difference in injury severity that is dependent upon weather? 
+
 traffic |> 
   filter(!(is.na(most_severe_injury)),
          weather_condition != "CLEAR",

@@ -72,15 +72,12 @@ The words "traffic crash" of conjure gruesome images of upturned cars, flashing 
 Figures 1a-d: A series of 4 images depicting the distributions of environmental conditions of chicago crashes.
 :::
 
-
-
-
 The overwhelming majority of crashes occur in clear weather, during daylight, and on dry roads, indicating that inclement weather and darkness are not disproportionate heavy predictors of traffic crashes. Most crashes do occur when there are no traffic lights or other devices nearby to modulate traffic, but crashes occurring near perfectly functional devices make up the second-largest category on this list. Crashes occurring near broken or otherwise non-functional traffic control devices only make up a small proportion of the data, which offers a positive outlook for the vast majority of crashes.
 
 Following, I examined the recorded primary and secondary causes for crashes, presented in tables below.
 
 ```{r}
-#| label: contributing-cause-tables
+#| label: tbl-contributory-causes
 #| layout-ncol: 2
 #| tbl-cap: Tables of Primary and Secondary Contributory Causes in Chicago Traffic Crashes
 #| tbl-subcap: ["Primary", "Secondary"]
@@ -102,27 +99,41 @@ As an aside, it is encouraging to note that crashes caused by technology-related
 
 Figure 2a-c depict the distribution of crashes at different times in the day, hours in a week, and months of the year, which reveals that crashes peak in the early afternoon at 3pm, on Fridays, and during the month of October.
 
-::: {#fig-time layout-ncol="3"}
-![a) Hourly Distribution](plots/final/at_a_glance_crash_hour_polished.png){width="250"}
+::: {#fig-time layout-ncol=3}
+![a) Hourly Distribution](plots/final/at_a_glance_crash_hour_polished.png){width="250"}{#fig-hourly}
 
-![b) Weekly Distribution](plots/final/at_a_glance_crash_day_polished.png){width="250"}
+![b) Weekly Distribution](plots/final/at_a_glance_crash_day_polished.png){width="250"}{#fig-weekly}
 
-![c) Monthly Distribution](plots/final/at_a_glance_crash_month_polished.png){width="250"}
+![c) Monthly Distribution](plots/final/at_a_glance_crash_month_polished.png){width="250"}{#fig-monthly}
 
 Crash distributions at hour, week, and month levels.
 :::
 
 These plots echo an important distinction that must be made when proceeding with analysis, which is the question of whether crashes occur more frequently at a certain time or under a certain condition because of that particular time/condition or because there are simply more cars around at that time. For example, the fact that crashes occur most frequently between 3-5pm is likely because there are more cars on roads during the afternoon rush hour, not that there is something inherently dangerous about this time. 
 
-Finally, Figure 3 depicts the distribution of most severe injuries at each crash, which allows us to conclude that, fortunately, the overwhelming majority of crashes do not result in incapacitating or fatal injuries. 
+Finally, Figure 3 below depicts the distribution of most severe injuries at each crash, which allows us to conclude that, fortunately, the overwhelming majority of crashes do not result in incapacitating or fatal injuries. 
+
+![Figure 3: Distribution of Most Severe Injury](plots/final/at_a_glance_most_severe_injury_distribution.png){width="250"}
 
 Unfortunately for the data analyst, the tameness of these results are somewhat dissatisfying, Thus, the remainder of the report will explore deeper connections between the various causes of crashes, environmental conditions, and injury severity found within the dataset. 
 
 ## Looking Deeper
 
-### What environment produces different kinds of crashes?
+###  What causes of crashes produce the greatest number of injuries?
+If most crashes do not result in injury, then for those which do cause injury, what are the primary contributing reason for these crashes? Injury severity can be categorized in severity of the worst injury but also in how many injuries are caused in the accident. I have chosen the latter here for a different perspective. Due to the number of levels in the primary contributory cause variable, I have grouped similar causes together for improved readability in visualization. The complete groupings can be found in the `5_final_figures_tables.R` script in the Github repository. From Figure 4, it is evident that driver-dependent causes such as improper driving, disregarding signs, and driver condition (including physical condition and aggressive behavioral) are the primary drivers of the number of injuries in a car crash. Environmental conditions such as weather, external vision obstructions, and other presences outside of the care account for relatively fewer injury-causing crashes.
 
-Figure 5 below is a tile plot depicting the frequency (count) of crashes occuring at intersections of certain weather conditions and severities
+![Figure 4: Cause vs. Injury Frequency](plots/final/looking_deeper_cause_v_injury_final.png){width="250"}
+
+### How do crash severity and type correlate?
+Taking yet another perspective for quantifying the types and injury severity of crashes, Figure 5 below is a tile plot depicting the frequency (count) of crashes occurring at the intersection of type (a variable primarily describing the location and object of the crash) and most severe injury. Understandably, it illustrats that crashes involving parked vehicles most often result in non-incapacitating injuries, whereas those involving pedestrians result in much more severe injuries.
+
+![Figure 4: Cause vs. Injury Frequency](plots/final/looking_deeper_crash_type_v_most_severe_injury_final.png)
+
+### Does the occurrence of weather as a contributory cause fluctuate by season?
+
+I was initially surprised in @fig-monthly that there were fewer crashes (see the complete list of contributory causes in @tbl-contributory-causes)
+
+
 
 If a particular type of weather frequently led to more severe injuries, one would expect the tile at the intersection of the two variables to consistently be brighter. However, the plot shows that the brightest row, attributed to the weather condition recorded most often, remains consistently bright across all injury types for the most commonly reported weather conditions. Only when the five most common weather conditions (clear, rain, overcast, snow, and unknown) are removed are there subtle differences in fatality based upon weather. From the figure below, it appears that blowing snow, fog/smoke/haze, and severe wind disproportionately produce fatal crashes.
 
@@ -133,6 +144,7 @@ If a particular type of weather frequently led to more severe injuries, one woul
 ### How are crashes occurring?
 
 ### Aside: When are Crashes Being Reported?
+
 
 ### Where are crashes occurring? {#sec-where}
 
