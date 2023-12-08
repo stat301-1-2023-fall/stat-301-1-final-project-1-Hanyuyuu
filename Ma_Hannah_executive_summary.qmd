@@ -47,10 +47,6 @@ The majority of reported traffic accidents do not result in injuries. Crashes mo
 
 -   Substance-related crashes occur disproportionately at night.
 
--   Most crashes occur on roads where the posted speed limit is around 30 mph, with outliers suggesting potential data collection errors.
-
--   Crashes are often reported promptly, with peaks in reporting delay at whole-number units (days, and years).
-
 -   Clusters of crashes observed in West, downtown, and South Chicago regions. Discrepancies between mapped crashes and top recorded addresses warrant further investigation. 
 
 ## Conclusion
@@ -58,6 +54,3 @@ The analysis provides a comprehensive understanding of traffic crashes in Chicag
 
 ## Future Directions 
 Further investigation into regional crash clusters and addressing discrepancies between mapped and recorded crash locations could provide insights into road design flaws and enhance the effectiveness of safety measures. Additionally, the issue of substance-related crashes at night may suggest a need for targeted policy changes.
-
-## References 
-The project utilized the City of Chicago's Traffic Crashes dataset and mapping resources from Duke University's Center for Data & Visualization.
