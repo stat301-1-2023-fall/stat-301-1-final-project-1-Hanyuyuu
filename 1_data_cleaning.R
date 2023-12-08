@@ -67,7 +67,7 @@ write_rds(injuries, "data/injuries.rds")
 
 ### Write codebooks
 traffic_codebook <- tibble(variable = c("crash_record_id",
-                                        "rd_no"
+                                        "rd_no",
                                         "crash_date_est_i",
                                         "crash_date",
                                         "posted_speed_limit",
@@ -119,7 +119,7 @@ traffic_codebook <- tibble(variable = c("crash_record_id",
                                         "delay_bins"
                                         ),
                             description = c("This number can be used to link to the same crash in the Vehicles and People datasets. This number also serves as a unique ID in this dataset.",
-                                            "License plate number",
+                                            "Chicago Police Department report number",
                                             "Crash date estimated by desk officer or reporting party (only used in cases where crash is reported at police station days after the crash)",
                                             "Date and time of crash as entered by the reporting officer",
                                             "Posted speed limit, as determined by reporting officer",
@@ -173,5 +173,5 @@ injuries_codebook <- tibble(variable = c("crash_record_id", "type", "value"),
                             description = c("Unique identifier for each traffic crash", "type or severity of injury", "the number of each type of injury associated with the respective crash"))
 
 write_rds(traffic_codebook, "data/traffic_data_codebook.rds")
-write_rds(injuries, "data/injuries_codebook.rds")
+write_rds(injuries_codebook, "data/injuries_codebook.rds")
   

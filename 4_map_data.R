@@ -62,9 +62,9 @@ chi_map_codebook <- tibble(variable = c("STATEFP10",
                                            "Latitude of the internal point.",
                                            "Longitude of the internal point.",
                                            "Participation flag indicating whether the geographic entity is part of another entity.",
-                                           "Attribute related to the spatial representation of the geographic entity.")
-                           )
+                                           "Attribute related to the spatial representation of the geographic entity."))
 write_rds(chi_map_codebook, "data/chi_map_codebook.rds")
 write_rds(traffic_map_codebook, "data/traffic_map_codebook.rds")
+
 #Reference for creating interactive map
 #https://map-rfun.library.duke.edu/01_georeference

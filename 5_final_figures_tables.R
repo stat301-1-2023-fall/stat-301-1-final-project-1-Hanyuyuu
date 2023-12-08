@@ -17,6 +17,11 @@ most_severe_injury_distribution <- ggplot(traffic, aes(most_severe_injury)) +
   labs(y = "Count",
        x = "Most Severe Injury")
 
+ggsave("ata_a_glance_most_severe_injury_distribution.png",
+       most_severe_injury_distribution,
+       path = "plots/final",
+       width = 6)
+
 ### At a Glance - Device, Roadway Surface, Lighting, and Weather Conditions
 
 weather <- ggplot(traffic, aes(weather_condition)) +
@@ -39,6 +44,8 @@ weather <- ggplot(traffic, aes(weather_condition)) +
        title = "a) Weather Condition") +
   theme(axis.text.y = element_text(angle = 15, vjust = 0, hjust = 1))
 
+ggsave("at_a_glance_weather_polished.png", weather, path = "plots/final")
+
 # Lighting Condition
 
 lighting <- ggplot(traffic, aes(x = lighting_condition)) +
@@ -55,6 +62,8 @@ lighting <- ggplot(traffic, aes(x = lighting_condition)) +
        title = "b) Lighting Condition") +
   theme(axis.text.y = element_text(angle = 15, vjust = 0, hjust = 1))
 
+ggsave("at_a_glance_lighting_polished.png", lighting, path = "plots/final")
+
 # Roadway conditions
 road <- ggplot(traffic, aes(roadway_surface_cond)) +
   geom_bar() +
@@ -68,8 +77,10 @@ road <- ggplot(traffic, aes(roadway_surface_cond)) +
   coord_flip() +
   labs(y = "Count",
        x = NULL,
-       title = "c) Road Surface\nCondition") +
+       title = "c) Road Surface Condition") +
   theme(axis.text.y = element_text(angle = 15, vjust = 0, hjust = 1))
+
+ggsave("at_a_glance_road_polished.png", road, path = "plots/final")
 
 # Device Condition
 
@@ -86,8 +97,10 @@ device <- ggplot(traffic, aes(device_condition)) +
   coord_flip() +
   labs(y = "Count",
        x = NULL,
-       title = "d) Traffic Control\nDevice Condition") +
+       title = "d) Traffic Control Device Condition") +
   theme(axis.text.y = element_text(angle = 15, vjust = 0, hjust = 1))
+
+ggsave("at_a_glance_device_polished.png", device, path = "plots/final")
 
 ### At a Glance - First Crash Type Distribution
 first_crash <- ggplot(traffic, aes(first_crash_type)) +
@@ -148,24 +161,6 @@ crash_month <- traffic |>
   geom_bar() +
   labs(y = "Count",
        x = "Month of Crash")
-
-### At a Glance - Injuries
-injuries |> 
-  filter(injury_type != "total") |> 
-  group_by(injury_type) |> 
-  summarize(sum = sum(value, na.rm = T)) |> 
-  arrange(desc(sum)) |> 
-  ggplot(aes(injury_type, sum)) +
-  geom_col() +
-  scale_x_discrete(limits = rev(c("no_indication", 
-                                  "non_incapacitating",
-                                  "reported_not_evident",
-                                  "incapacitating",
-                                  "fatal",
-                                  "unknown"))) +
-  coord_flip() +
-  labs(y = "Sum",
-       x = "Injury Type")
 
 ### Looking deeper - What causes of crashes produce the greatest number of injuries?
 cause_v_injury <- traffic |> 
@@ -341,7 +336,8 @@ weather_severity_all <- traffic |>
   count(most_severe_injury, weather_condition) |> 
   mutate(prop = n / sum(n), .by = most_severe_injury) |> 
   ggplot(aes(most_severe_injury, weather_condition)) +
-  geom_tile(mapping = aes(fill = prop)) 
+  geom_tile(mapping = aes(fill = prop)) +
+  theme(axis.text.x = element_text(angle = 15, vjust = 1, hjust = 1))
 
 ggsave("looking_deeper_weather_all_final.png",
        weather_severity_all,
@@ -357,7 +353,8 @@ weather_severity_other <- traffic |>
   count(most_severe_injury, weather_condition) |> 
   mutate(prop = n / sum(n), .by = most_severe_injury) |> 
   ggplot(aes(most_severe_injury, weather_condition)) +
-  geom_tile(mapping = aes(fill = prop)) 
+  geom_tile(mapping = aes(fill = prop)) +
+  theme(axis.text.x = element_text(angle = 15, vjust = 1, hjust = 1))
 
 ggsave("looking_deeper_weather_other_final.png",
        weather_severity_other,
@@ -428,8 +425,9 @@ ggsave("looking_deeper_night_final.png",
 
 # How do crashes at different speeds involving different numbers of units differ in injury severity? 
 
-units_v_speed <- ggplot(traffic |> filter(!is.na(most_severe_injury)), 
-                        aes(posted_speed_limit, num_units)) +
+units_v_speed <-
+  ggplot(traffic |> filter(!is.na(most_severe_injury)), 
+         aes(posted_speed_limit, num_units)) +
   geom_point(position = position_jitter(width = 3, height = 0.5)) +
   facet_wrap(~most_severe_injury) +
   labs(x = "Posted Speed Limit",

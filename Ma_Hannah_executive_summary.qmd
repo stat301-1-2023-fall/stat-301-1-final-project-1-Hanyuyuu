@@ -1,5 +1,5 @@
 ---
-title: "Traffic Crashes EDA"
+title: "Traffic Crashes EDA Executive Summary"
 subtitle: |
   | Final Project 
   | Data Science 1 with R (STAT 301-1)
@@ -17,8 +17,6 @@ execute:
   echo: false
 ---
 
-An executive summary should summarize the key points of the report. It should restate the purpose of the report, highlight the major results, and summarize any conclusions. This report should be concise and clearly written.
-
 ::: {.callout-tip icon="false"}
 ## Github Repo and Data Source
 
@@ -29,29 +27,29 @@ An executive summary should summarize the key points of the report. It should re
 
 ## Project Overview
 
-This exploratory data analysis (EDA) project investigates over 700,000 traffic crashes in Chicago using a high-quality dataset from the City of Chicago. The primary goal is to understand the landscape of traffic crashes in the city, addressing questions about predictors, causes, and patterns associated with these incidents. The analysis utilizes R and various packages for visualization and mapping.
+This exploratory data analysis project investigates over 700,000 traffic crashes in Chicago using a high-quality dataset from the City of Chicago. The primary goal is to understand the landscape of traffic crashes in the city, addressing questions about predictors, and patterns associated with these incidents.
 
 ## Key Findings
 
 ### At First Glance
 
-The majority of reported traffic accidents do not result in injuries. Crashes often occur in clear weather, during daylight, and on dry roads. Primary causes include failing to yield, following too closely, and improper overtaking. Technology-related distractions contribute minimally to crashes.
+The majority of reported traffic accidents do not result in injuries. Crashes most often occur in clear weather, during daylight, and on dry roads. 
 
--   Primary and secondary contributory causes of crashes are typically driver-dependent. Encouragingly, technology-related distractions have a relatively low impact on crash occurrences.
+-   Primary reasons for crashes include failing to yield, following too closely, and improper overtaking. Encouragingly, technology-related distractions have a relatively low impact on crash occurrences.
 
--   Crashes peak in the early afternoon, on Fridays, and during October. Data suggests increased traffic correlates with crash crash frequency.
+-   Data suggests increased traffic correlates with crash frequency.
 
 ### Looking Deeper
 
 -   Driver-dependent causes contribute significantly to the number of injuries in crashes. Crashes involving pedestrians tend to result in more severe injuries.
 
--   Increase in weather-related crashes during winter months, despite fewer incidents overall. Certain weather conditions, like blowing snow and severe wind, show a higher likelihood of fatal crashes.
+-   There exists an increase in weather-related crashes during winter months, despite fewer incidents overall. Certain weather conditions, like blowing snow and severe wind, show a higher likelihood of fatal crashes.
 
--   Substance abuse-related crashes occur disproportionately at night. Obscured vision crashes increase between 6-10 am.
+-   Substance-related crashes occur disproportionately at night.
 
--   Most crashes occur at around 30 mph, with outliers suggesting potential data collection errors. Relationship between the number of units involved in a crash and posted speed limit explored. Delay in Reporting Analysis:
+-   Most crashes occur on roads where the posted speed limit is around 30 mph, with outliers suggesting potential data collection errors.
 
--   Crashes often reported promptly, with peaks in reporting delay at whole-number units (days, weeks, years).
+-   Crashes are often reported promptly, with peaks in reporting delay at whole-number units (days, and years).
 
 -   Clusters of crashes observed in West, downtown, and South Chicago regions. Discrepancies between mapped crashes and top recorded addresses warrant further investigation. 
 
@@ -59,7 +57,7 @@ The majority of reported traffic accidents do not result in injuries. Crashes of
 The analysis provides a comprehensive understanding of traffic crashes in Chicago, emphasizing the influence of driver behavior, weather conditions, and contributing causes. While most incidents are non-fatal, notable patterns emerge, such as the higher occurrence of substance-related crashes at night. The findings suggest opportunities for policy improvements to address specific challenges, such as reducing dangerous driving due to substance abuse.
 
 ## Future Directions 
-Further investigation into regional clusters and addressing discrepancies between mapped and recorded crash locations could provide insights into road design flaws and enhance the effectiveness of safety measures. Additionally, addressing substance-related crashes at night may require targeted interventions and policy adjustments.
+Further investigation into regional crash clusters and addressing discrepancies between mapped and recorded crash locations could provide insights into road design flaws and enhance the effectiveness of safety measures. Additionally, the issue of substance-related crashes at night may suggest a need for targeted policy changes.
 
 ## References 
 The project utilized the City of Chicago's Traffic Crashes dataset and mapping resources from Duke University's Center for Data & Visualization.
